@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Download,
   Eye,
@@ -81,6 +82,7 @@ export default function PrdEditorHeader({
   onToggleFullscreen,
   onClose,
 }: PrdEditorHeaderProps) {
+  const { t } = useTranslation('tasks');
   const fileNameInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
@@ -100,7 +102,7 @@ export default function PrdEditorHeader({
                   value={fileName}
                   onChange={(event) => onFileNameChange(event.target.value)}
                   className="min-w-0 flex-1 border-none bg-transparent text-base font-medium text-gray-900 placeholder-gray-400 outline-none dark:text-white dark:placeholder-gray-500 sm:text-sm"
-                  placeholder="Enter PRD filename"
+                  placeholder={t('prdEditor.filenamePlaceholder')}
                   maxLength={100}
                 />
                 <span className="ml-1 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 sm:text-xs">
@@ -111,7 +113,7 @@ export default function PrdEditorHeader({
               <button
                 onClick={() => fileNameInputRef.current?.focus()}
                 className="p-1 text-gray-400 transition-colors hover:text-purple-600 dark:hover:text-purple-400"
-                title="Focus filename input"
+                title={t('prdEditor.focusFilename')}
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -130,35 +132,35 @@ export default function PrdEditorHeader({
               </span>
               {isNewFile && (
                 <span className="whitespace-nowrap rounded bg-green-100 px-2 py-1 text-xs text-green-600 dark:bg-green-900 dark:text-green-300">
-                  New
+                  {t('prdEditor.newBadge')}
                 </span>
               )}
             </div>
           </div>
 
           <p className="mt-1 truncate text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
-            Product Requirements Document
+            {t('prdEditor.subtitle')}
           </p>
         </div>
       </div>
 
       <div className="flex flex-shrink-0 items-center gap-1 md:gap-2">
         <HeaderIconButton
-          title={previewMode ? 'Switch to edit mode' : 'Preview markdown'}
+          title={previewMode ? t('prdEditor.switchToEdit') : t('prdEditor.previewMarkdown')}
           onClick={onTogglePreview}
           icon={<Eye className="h-5 w-5 md:h-4 md:w-4" />}
           active={previewMode}
         />
 
         <HeaderIconButton
-          title={wordWrap ? 'Disable word wrap' : 'Enable word wrap'}
+          title={wordWrap ? t('prdEditor.disableWrap') : t('prdEditor.enableWrap')}
           onClick={onToggleWordWrap}
           icon={<span className="font-mono text-sm font-bold md:text-xs">WRAP</span>}
           active={wordWrap}
         />
 
         <HeaderIconButton
-          title="Toggle theme"
+          title={t('prdEditor.toggleTheme')}
           onClick={onToggleTheme}
           icon={
             isDarkMode ? (
@@ -170,7 +172,7 @@ export default function PrdEditorHeader({
         />
 
         <HeaderIconButton
-          title="Download PRD"
+          title={t('prdEditor.download')}
           onClick={onDownload}
           icon={<Download className="h-5 w-5 md:h-4 md:w-4" />}
         />
@@ -182,10 +184,10 @@ export default function PrdEditorHeader({
             'px-3 py-2 rounded-md disabled:opacity-50 flex items-center gap-2 transition-colors text-sm font-medium text-white min-h-[44px] md:min-h-0',
             'bg-purple-600 hover:bg-purple-700',
           )}
-          title="Generate tasks from PRD content"
+          title={t('prdEditor.generateTasksTitle')}
         >
           <Sparkles className="h-4 w-4" />
-          <span className="hidden md:inline">Generate Tasks</span>
+          <span className="hidden md:inline">{t('prdEditor.generateTasks')}</span>
         </button>
 
         <button
@@ -201,12 +203,12 @@ export default function PrdEditorHeader({
               <svg className="h-5 w-5 md:h-4 md:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="hidden sm:inline">Saved!</span>
+              <span className="hidden sm:inline">{t('prdEditor.saved')}</span>
             </>
           ) : (
             <>
               <Save className="h-5 w-5 md:h-4 md:w-4" />
-              <span className="hidden sm:inline">{saving ? 'Saving...' : 'Save PRD'}</span>
+              <span className="hidden sm:inline">{saving ? t('prdEditor.saving') : t('prdEditor.savePrd')}</span>
             </>
           )}
         </button>
@@ -214,13 +216,13 @@ export default function PrdEditorHeader({
         <button
           onClick={onToggleFullscreen}
           className="hidden items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white md:flex"
-          title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+          title={isFullscreen ? t('prdEditor.exitFullscreen') : t('prdEditor.enterFullscreen')}
         >
           {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
         </button>
 
         <HeaderIconButton
-          title="Close"
+          title={t('prdEditor.close')}
           onClick={onClose}
           icon={<X className="h-6 w-6 md:h-4 md:w-4" />}
         />

@@ -38,12 +38,6 @@ type CreateProjectResponse = {
   message?: string;
 };
 
-type CloneProgressEvent = {
-  type?: string;
-  message?: string;
-  project?: Record<string, unknown>;
-};
-
 type CloneWorkspaceParams = {
   workspacePath: string;
   githubUrl: string;
@@ -144,60 +138,24 @@ export const createProjectRequest = async (payload: CreateProjectPayload) => {
   return data.project;
 };
 
-const buildCloneProgressUrl = ({
-  workspacePath,
-  githubUrl,
-  tokenMode,
-  selectedGithubToken,
-  newGithubToken,
-}: CloneWorkspaceParams) =>
-  api.cloneProjectProgressUrl({
-    path: workspacePath.trim(),
-    githubUrl: githubUrl.trim(),
-    githubTokenId: tokenMode === 'stored' ? selectedGithubToken : null,
-    newGithubToken: tokenMode === 'new' ? newGithubToken.trim() : null,
-  });
-
-export const cloneWorkspaceWithProgress = (
+export const cloneWorkspaceWithProgress = async (
   params: CloneWorkspaceParams,
   handlers: CloneProgressHandlers,
-) =>
-  new Promise<Record<string, unknown> | undefined>((resolve, reject) => {
-    const eventSource = new EventSource(buildCloneProgressUrl(params));
-    let settled = false;
+) => {
+  // Cloning is intentionally represented by a local project fixture; no GitHub
+  // URL or credential is sent anywhere in browser-only mode.
+  void params.githubUrl;
+  void params.tokenMode;
+  void params.selectedGithubToken;
+  void params.newGithubToken;
 
-    const settle = (callback: () => void) => {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      eventSource.close();
-      callback();
-    };
+  handlers.onProgress('Preparing the local demo workspace…');
+  const response = await api.createProject({ path: params.workspacePath.trim() });
+  const data = await parseJson<CreateProjectResponse>(response);
+  if (!response.ok || !data.project) {
+    throw new Error(resolveCreateProjectErrorMessage(data) || 'Failed to create local project');
+  }
 
-    eventSource.onmessage = (event) => {
-      try {
-        const payload = JSON.parse(event.data) as CloneProgressEvent;
-
-        if (payload.type === 'progress' && payload.message) {
-          handlers.onProgress(payload.message);
-          return;
-        }
-
-        if (payload.type === 'complete') {
-          settle(() => resolve(payload.project));
-          return;
-        }
-
-        if (payload.type === 'error') {
-          settle(() => reject(new Error(payload.message || 'Failed to clone repository')));
-        }
-      } catch (error) {
-        console.error('Error parsing clone progress event:', error);
-      }
-    };
-
-    eventSource.onerror = () => {
-      settle(() => reject(new Error('Connection lost during clone')));
-    };
-  });
+  handlers.onProgress('Local demo workspace is ready.');
+  return data.project;
+};

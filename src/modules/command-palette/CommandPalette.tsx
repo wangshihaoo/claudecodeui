@@ -257,7 +257,9 @@ function CommandPalette({
 
             {showActions && (
               <CommandGroup heading={t('commandPalette.groupSettings')}>
-                {SETTINGS_MAIN_TABS.map(({ id, label, keywords, icon: Icon }) => (
+                {SETTINGS_MAIN_TABS.map(({ id, labelKey, keywords, icon: Icon }) => {
+                  const label = t(labelKey, { ns: 'settings' });
+                  return (
                   <CommandItem
                     key={id}
                     value={`Settings ${label} ${keywords}`}
@@ -266,7 +268,8 @@ function CommandPalette({
                     <Icon className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
                     <span className="flex-1">{t('commandPalette.settingsItem', { label })}</span>
                   </CommandItem>
-                ))}
+                  );
+                })}
               </CommandGroup>
             )}
 

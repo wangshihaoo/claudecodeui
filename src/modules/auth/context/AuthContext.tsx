@@ -2,8 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { useTranslation } from 'react-i18next';
 import type { ReactNode } from 'react';
 
-import { IS_PLATFORM } from '@/shared/utils';
-import { api } from '@/shared/api';
+import { api, LOCAL_DEMO_TOKEN, LOCAL_DEMO_USER } from '@/shared/api';
 import { AUTH_SESSION_EXPIRED_EVENT, AUTH_TOKEN_REFRESHED_EVENT, getAuthTokenRefreshDelay, isValidRefreshedToken, storeAuthToken } from '@/shared/authToken';
 import { hydrateChatDrafts, resetChatDrafts } from '@/shared/chatDrafts';
 import { hydrateUserPreferences, resetUserPreferences } from '@/shared/userSettings';
@@ -107,8 +106,10 @@ export function useAuth(): AuthContextValue {
 /** Used by App to expose the session, and its login/logout actions, to every module through useAuth. */
 export function AuthProvider({ children }: AuthProviderProps) {
   const { t } = useTranslation('auth');
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [token, setToken] = useState<string | null>(() => readStoredToken());
+  // Start with the local demo identity so the browser-only runtime never waits
+  // for a server login before it can render the workspace.
+  const [user, setUser] = useState<AuthUser | null>(() => LOCAL_DEMO_USER);
+  const [token, setToken] = useState<string | null>(() => readStoredToken() ?? LOCAL_DEMO_TOKEN);
   const [isLoading, setIsLoading] = useState(true);
   const [needsSetup, setNeedsSetup] = useState(false);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(true);
@@ -163,7 +164,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [checkOnboardingStatus]);
 
   const refreshSession = useCallback(async () => {
-    if (IS_PLATFORM || !token || !user) {
+    if (!token || !user || token === LOCAL_DEMO_TOKEN) {
       return;
     }
 
@@ -247,20 +248,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [checkOnboardingStatus, clearSession, t, token]);
 
   useEffect(() => {
-    if (IS_PLATFORM) {
-      setUser({ username: 'platform-user' });
-      setNeedsSetup(false);
-      void checkOnboardingStatus().finally(() => {
-        setIsLoading(false);
-      });
-      return;
-    }
-
     void checkAuthStatus();
-  }, [checkAuthStatus, checkOnboardingStatus]);
+  }, [checkAuthStatus]);
 
   useEffect(() => {
-    if (IS_PLATFORM || !token || !user) {
+    if (!token || !user || token === LOCAL_DEMO_TOKEN) {
       return undefined;
     }
 

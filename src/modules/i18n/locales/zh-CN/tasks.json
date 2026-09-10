@@ -133,10 +133,100 @@
   "priorities": {
     "high": "高",
     "medium": "中",
-    "low": "低"
+    "low": "低",
+    "highTitle": "高优先级",
+    "lowTitle": "低优先级",
+    "mediumTitle": "中优先级"
   },
   "noMatchingTasks": {
     "title": "没有符合筛选条件的任务",
     "description": "尝试调整您的搜索或筛选条件。"
+  },
+  "banner": {
+    "allComplete": "全部任务已完成",
+    "detailAiPowered": "- 由 AI 驱动的任务管理，支持依赖和子任务。",
+    "detailKanbanList": "- 看板和列表视图，便于日常执行。",
+    "detailPrdDriven": "- 由 PRD 驱动生成任务，加快项目启动。",
+    "hideDetails": "隐藏详情",
+    "initialize": "初始化",
+    "noPending": "没有待处理任务",
+    "startTask": "开始任务",
+    "viewAllTasks": "查看全部任务",
+    "viewTaskDetails": "查看任务详情",
+    "whatIsTaskmaster": "什么是 TaskMaster？"
+  },
+  "board": {
+    "dependsOn": "依赖于：{{ids}}",
+    "dependsOnTooltip": "依赖于：{{tasks}}",
+    "parentTask": "任务 {{id}}",
+    "statusLabel": "状态：{{status}}",
+    "progress": "进度：",
+    "subtasksCompleted": "已完成 {{completed}} / {{total}} 个子任务",
+    "status": {
+      "done": "已完成",
+      "inProgress": "进行中",
+      "review": "待评审",
+      "deferred": "已延期",
+      "cancelled": "已取消",
+      "pending": "待处理"
+    },
+    "priority": {
+      "high": "高优先级",
+      "medium": "中优先级",
+      "low": "低优先级",
+      "none": "未设置优先级"
+    },
+    "taskId": "任务 ID：{{id}}"
+  },
+  "detail": {
+    "noDependencies": "没有依赖",
+    "description": "描述",
+    "noDescription": "暂无描述",
+    "implementationDetails": "实现细节",
+    "testStrategy": "测试策略",
+    "status": "状态",
+    "priority": "优先级",
+    "priorityNotSet": "未设置",
+    "dependencies": "依赖",
+    "copyId": "复制任务 ID",
+    "save": "保存",
+    "cancelEditing": "取消编辑",
+    "edit": "编辑任务",
+    "close": "关闭"
+  },
+  "createModal": {
+    "title": "创建 AI 生成的任务",
+    "proTip": "提示：直接在对话里向 Claude Code 提出需求",
+    "proTipBody": "在聊天中说明上下文和要求，TaskMaster 可以生成可直接实现的任务。",
+    "example": "示例：",
+    "examplePrompt": "请添加一个头像上传任务，并包含最佳实践调研。",
+    "viewDocs": "查看 TaskMaster 文档",
+    "gotIt": "知道了"
+  },
+  "prdEditor": {
+    "generateTasks": "生成任务",
+    "generateTasksTitle": "根据 PRD 内容生成任务",
+    "saved": "已保存！",
+    "saving": "保存中...",
+    "savePrd": "保存 PRD",
+    "lines": "行数：{{count}}",
+    "characters": "字符：{{count}}",
+    "words": "词数：{{count}}",
+    "formatMarkdown": "格式：Markdown",
+    "shortcutHint": "按 Ctrl+S 保存，Esc 关闭",
+    "loading": "正在加载 PRD...",
+    "filenamePlaceholder": "输入 PRD 文件名",
+    "focusFilename": "聚焦文件名输入框",
+    "newBadge": "新建",
+    "subtitle": "产品需求文档",
+    "switchToEdit": "切换到编辑模式",
+    "previewMarkdown": "预览 Markdown",
+    "disableWrap": "关闭自动换行",
+    "enableWrap": "开启自动换行",
+    "toggleTheme": "切换主题",
+    "download": "下载 PRD",
+    "close": "关闭",
+    "exitFullscreen": "退出全屏",
+    "enterFullscreen": "进入全屏"
   }
 }

@@ -14,6 +14,9 @@ export type Language = {
   nativeName: string;
 };
 
+/** Default UI language when the user has not chosen one yet. */
+export const DEFAULT_LANGUAGE = 'zh-CN';
+
 export const languages: Language[] = [
   {
     value: 'en',

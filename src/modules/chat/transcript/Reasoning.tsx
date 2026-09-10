@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { BrainIcon, ChevronDownIcon } from 'lucide-react';
 
+import { i18n } from '@/modules/i18n';
 import { cn } from '@/shared/utils';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger, Shimmer } from '@/shared/ui';
 
@@ -134,12 +135,12 @@ export type ReasoningTriggerProps = {
 
 const defaultGetThinkingMessage = (isStreaming: boolean, duration?: number): React.ReactNode => {
   if (isStreaming || duration === 0) {
-    return <Shimmer>Thinking...</Shimmer>;
+    return <Shimmer>{i18n.t('reasoning.thinking', { ns: 'chat' })}</Shimmer>;
   }
   if (duration === undefined) {
-    return <p>Thought for a few seconds</p>;
+    return <p>{i18n.t('reasoning.thoughtBriefly', { ns: 'chat' })}</p>;
   }
-  return <p>Thought for {duration} seconds</p>;
+  return <p>{i18n.t('reasoning.thoughtSeconds', { ns: 'chat', count: duration })}</p>;
 };
 
 /** Toggle of Reasoning, used by MessageComponent. */

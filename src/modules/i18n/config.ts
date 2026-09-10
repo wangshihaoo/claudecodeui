@@ -58,6 +58,7 @@ import zhSidebar from '@/modules/i18n/locales/zh-CN/sidebar.json';
 import zhChat from '@/modules/i18n/locales/zh-CN/chat.json';
 import zhCodeEditor from '@/modules/i18n/locales/zh-CN/codeEditor.json';
 import zhTasks from '@/modules/i18n/locales/zh-CN/tasks.json';
+import zhGit from '@/modules/i18n/locales/zh-CN/git.json';
 import jaCommon from '@/modules/i18n/locales/ja/common.json';
 import jaSettings from '@/modules/i18n/locales/ja/settings.json';
 import jaAuth from '@/modules/i18n/locales/ja/auth.json';
@@ -111,7 +112,7 @@ import zhTWCodeEditor from '@/modules/i18n/locales/zh-TW/codeEditor.json';
 import zhTWTasks from '@/modules/i18n/locales/zh-TW/tasks.json';
 
 // Import supported languages configuration
-import { languages } from '@/modules/i18n/languages';
+import { DEFAULT_LANGUAGE, languages } from '@/modules/i18n/languages';
 import {
   readUserPreference,
   subscribeToUserPreferences,
@@ -127,7 +128,7 @@ const getSavedLanguage = (): string => {
   if (saved && languages.some(lang => lang.value === saved)) {
     return saved;
   }
-  return 'en';
+  return DEFAULT_LANGUAGE;
 };
 
 // Initialize i18next
@@ -144,7 +145,7 @@ i18n
         chat: enChat,
         codeEditor: enCodeEditor,
         tasks: enTasks,
-git: enGit,
+        git: enGit,
       },
       fr: {
         common: frCommon,
@@ -181,6 +182,7 @@ git: enGit,
         chat: zhChat,
         codeEditor: zhCodeEditor,
         tasks: zhTasks,
+        git: zhGit,
       },
       ja: {
         common: jaCommon,
@@ -273,9 +275,19 @@ git: enGit,
     },
   });
 
+const syncDocumentLanguage = (lng: string) => {
+  if (typeof document === 'undefined') {
+    return;
+  }
+  document.documentElement.lang = lng;
+};
+
+syncDocumentLanguage(i18n.resolvedLanguage || i18n.language);
+
 // Save language preference when it changes
 i18n.on('languageChanged', (lng: string) => {
   writeUserPreference('userLanguage', lng);
+  syncDocumentLanguage(lng);
 });
 
 // A language chosen on another device arrives with the hydrated preferences,

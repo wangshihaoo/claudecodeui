@@ -1,6 +1,3 @@
-import { IS_PLATFORM } from '@/shared/utils';
-import { getStoredAuthToken } from '@/shared/authToken';
-
 type ShellInitMessage = {
   type: 'init';
   projectPath: string;
@@ -36,20 +33,115 @@ type ShellIncomingMessage =
   | { type: 'auth_url'; url?: string }
   | { type: string; [key: string]: unknown };
 
-export function getShellWebSocketUrl(): string | null {
-  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+/** Minimal local terminal transport used by the browser-only shell fixture. */
+export type ShellSocket = {
+  readyState: number;
+  onopen: (() => void) | null;
+  onmessage: ((event: { data: string }) => void) | null;
+  onclose: (() => void) | null;
+  onerror: ((error: unknown) => void) | null;
+  send: (payload: string) => void;
+  close: () => void;
+};
 
-  if (IS_PLATFORM) {
-    return `${protocol}//${window.location.host}/shell`;
-  }
+const SHELL_SOCKET_CONNECTING = 0;
+const SHELL_SOCKET_OPEN = 1;
+const SHELL_SOCKET_CLOSED = 3;
 
-  const token = getStoredAuthToken();
-  if (!token) {
-    console.error('No authentication token found for Shell WebSocket connection');
-    return null;
-  }
+/** Creates a deterministic terminal transport without contacting a shell server. */
+export function createLocalShellSocket(): ShellSocket {
+  const timers = new Set<ReturnType<typeof setTimeout>>();
 
-  return `${protocol}//${window.location.host}/shell?token=${encodeURIComponent(token)}`;
+  const socket: ShellSocket = {
+    readyState: SHELL_SOCKET_CONNECTING,
+    onopen: null,
+    onmessage: null,
+    onclose: null,
+    onerror: null,
+    send: () => undefined,
+    close: () => undefined,
+  };
+
+  const schedule = (callback: () => void, delay = 0): void => {
+    const timer = setTimeout(() => {
+      timers.delete(timer);
+      callback();
+    }, delay);
+    timers.add(timer);
+  };
+
+  const emit = (frame: ShellIncomingMessage, delay = 0): void => {
+    schedule(() => {
+      if (socket.readyState !== SHELL_SOCKET_OPEN) return;
+      socket.onmessage?.({ data: JSON.stringify(frame) });
+    }, delay);
+  };
+
+  socket.send = (payload: string): void => {
+    if (socket.readyState !== SHELL_SOCKET_OPEN) return;
+
+    let message: Record<string, unknown>;
+    try {
+      message = JSON.parse(payload) as Record<string, unknown>;
+    } catch {
+      socket.onerror?.(new Error('Invalid local shell payload'));
+      return;
+    }
+
+    const type = typeof message.type === 'string' ? message.type : '';
+    if (type === 'init') {
+      const projectPath = typeof message.projectPath === 'string' && message.projectPath
+        ? message.projectPath
+        : '/workspace/cloudcli-demo';
+      emit({ type: 'output', data: `CloudCLI local shell\r\n${projectPath}\r\n$ ` });
+
+      const initialCommand = typeof message.initialCommand === 'string'
+        ? message.initialCommand.trim()
+        : '';
+      if (initialCommand) {
+        emit({
+          type: 'output',
+          data: `\r\n$ ${initialCommand}\r\nLocal demo command completed.\r\nProcess exited with code 0\r\n`,
+        }, 20);
+      }
+      return;
+    }
+
+    if (type === 'input') {
+      const input = typeof message.data === 'string' ? message.data : '';
+      if (input === '\u0003') {
+        emit({ type: 'output', data: '^C\r\n$ ' });
+      } else if (input === '\r' || input === '\n') {
+        emit({ type: 'output', data: '\r\n$ ' });
+      } else if (input) {
+        emit({ type: 'output', data: input });
+      }
+    }
+  };
+
+  socket.close = (): void => {
+    if (socket.readyState === SHELL_SOCKET_CLOSED) return;
+    for (const timer of timers) clearTimeout(timer);
+    timers.clear();
+    socket.readyState = SHELL_SOCKET_CLOSED;
+    socket.onclose?.();
+  };
+
+  schedule(() => {
+    if (socket.readyState !== SHELL_SOCKET_CONNECTING) return;
+    socket.readyState = SHELL_SOCKET_OPEN;
+    socket.onopen?.();
+  });
+
+  return socket;
+}
+
+export function isShellSocketOpen(socket: ShellSocket | null): boolean {
+  return socket?.readyState === SHELL_SOCKET_OPEN;
+}
+
+export function isShellSocketActive(socket: ShellSocket | null): boolean {
+  return socket?.readyState === SHELL_SOCKET_CONNECTING || socket?.readyState === SHELL_SOCKET_OPEN;
 }
 
 export function parseShellMessage(payload: string): ShellIncomingMessage | null {
@@ -60,8 +152,8 @@ export function parseShellMessage(payload: string): ShellIncomingMessage | null 
   }
 }
 
-export function sendSocketMessage(ws: WebSocket | null, message: ShellOutgoingMessage): void {
-  if (ws && ws.readyState === WebSocket.OPEN) {
+export function sendSocketMessage(ws: ShellSocket | null, message: ShellOutgoingMessage): void {
+  if (ws && isShellSocketOpen(ws)) {
     ws.send(JSON.stringify(message));
   }
 }

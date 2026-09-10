@@ -23,6 +23,7 @@
     "exitFullscreen": "Exit fullscreen",
     "fullscreen": "Fullscreen",
     "close": "Close",
+    "previewHtml": "Open HTML preview in new tab",
     "previewMarkdown": "Preview markdown",
     "editMarkdown": "Edit markdown"
   },

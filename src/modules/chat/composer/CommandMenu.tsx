@@ -50,15 +50,6 @@ const menuBaseStyle: CSSProperties = {
   backdropFilter: 'blur(12px)',
 };
 
-const namespaceLabels: Record<string, string> = {
-  frequent: 'Frequently Used',
-  builtin: 'Built-in Commands',
-  skill: 'Skills',
-  project: 'Project Commands',
-  user: 'User Commands',
-  other: 'Other Commands',
-};
-
 const namespaceIcons: Record<string, LucideIcon> = {
   frequent: Star,
   builtin: Terminal,
@@ -243,7 +234,7 @@ export default function CommandMenu({
           textAlign: 'center',
         }}
       >
-        No commands available
+        {t('chat:commandMenu.empty')}
       </div>
     );
   }
@@ -260,7 +251,7 @@ export default function CommandMenu({
         <div key={namespace} className="command-group">
           {orderedNamespaces.length > 1 && (
             <div className="flex items-center justify-between px-2 pb-1.5 pt-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-              <span>{namespaceLabels[namespace] || namespace}</span>
+              <span>{t(`chat:commandMenu.namespaces.${namespace}`, { defaultValue: namespace })}</span>
               <span className="rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
                 {(groupedCommands[namespace] || []).length}
               </span>

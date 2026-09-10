@@ -9,7 +9,9 @@
     "copied": "Message copied",
     "selectFormat": "Select copy format",
     "copyAsMarkdown": "Copy as markdown",
-    "copyAsText": "Copy as text"
+    "copyAsText": "Copy as text",
+    "markdownShort": "MD",
+    "textShort": "TXT"
   },
   "messageTypes": {
     "user": "U",
@@ -57,7 +59,8 @@
     "waiting": "Waiting for your response in the CLI",
     "instruction": "Please select an option in your terminal where Claude is running.",
     "selectedOption": "✓ Claude selected option {{number}}",
-    "instructionDetail": "In the CLI, you would select this option interactively using arrow keys or by typing the number."
+    "instructionDetail": "In the CLI, you would select this option interactively using arrow keys or by typing the number.",
+    "selectAllThatApply": "Select all that apply"
   },
   "thinking": {
     "title": "Thinking...",
@@ -72,7 +75,15 @@
     "addTo": "Adds {{entry}} to Allowed Tools.",
     "retry": "Permission saved. Retry the request to use the tool.",
     "error": "Unable to update permissions. Please try again.",
-    "openSettings": "Open settings"
+    "openSettings": "Open settings",
+    "required": "Permission required",
+    "tool": "Tool: {{name}}",
+    "allowRule": "Allow rule: {{entry}}",
+    "viewInput": "View tool input",
+    "deny": "Deny",
+    "allowOnce": "Allow once",
+    "allowSaved": "Allow (saved)",
+    "allowRemember": "Allow & remember"
   },
   "todo": {
     "updated": "Todo list has been updated successfully",
@@ -80,7 +91,12 @@
   },
   "plan": {
     "viewPlan": "📋 View implementation plan",
-    "title": "Implementation Plan"
+    "title": "Implementation Plan",
+    "toggle": "Toggle plan",
+    "generating": "Generating plan...",
+    "rawParams": "raw params",
+    "revise": "Revise",
+    "build": "Build"
   },
   "usageLimit": {
     "resetAt": "Claude usage limit reached. Your limit will reset at **{{time}} {{timezone}}** - {{date}}"
@@ -136,7 +152,8 @@
       "willSend": "Will send when this finishes",
       "edit": "Edit queued message",
       "delete": "Delete queued message"
-    }
+    },
+    "dropFiles": "Drop files here"
   },
   "composer": {
     "reasoning": "Reasoning",
@@ -353,5 +370,56 @@
     "tokensLabel_other": "tokens",
     "escClosesModal": "Esc closes the modal.",
     "close": "Close"
+  },
+  "commandMenu": {
+    "empty": "No commands available",
+    "namespaces": {
+      "frequent": "Frequently Used",
+      "builtin": "Built-in Commands",
+      "skill": "Skills",
+      "project": "Project Commands",
+      "user": "User Commands",
+      "other": "Other Commands"
+    }
+  },
+  "reasoning": {
+    "thinking": "Thinking...",
+    "thoughtBriefly": "Thought for a few seconds",
+    "thoughtSeconds": "Thought for {{count}} seconds"
+  },
+  "attachments": {
+    "unnamedFile": "Attached file",
+    "unnamedImage": "Attached image",
+    "fileAttachment": "File attachment"
+  },
+  "modelLibrary": {
+    "title": "Model library",
+    "description": "Add model IDs supported by your provider. Built-in models stay locked.",
+    "back": "Back to models",
+    "editTitle": "Edit custom model",
+    "addTitle": "Add a custom model",
+    "idHint": "The ID is sent to {{provider}} exactly as written.",
+    "nameLabel": "Model name",
+    "namePlaceholder": "e.g. GPT-5.5 Pro",
+    "idLabel": "Model ID",
+    "idPlaceholder": "e.g. gpt-5.5-pro",
+    "idHelp": "Use the exact identifier accepted by the provider CLI. IDs cannot contain spaces.",
+    "idNoSpaces": "Model IDs cannot contain spaces.",
+    "saving": "Saving…",
+    "saveChanges": "Save changes",
+    "addModel": "Add model",
+    "yourModels": "Your models",
+    "yourModelsHint": "Editable and stored locally",
+    "emptyTitle": "No custom models yet",
+    "emptyHint": "Add one with the form and it will appear in every model picker.",
+    "customBadge": "Custom",
+    "editAria": "Edit {{name}}",
+    "deleteAria": "Delete {{name}}",
+    "confirmDelete": "Delete this model from all pickers?",
+    "builtinTitle": "Built-in models",
+    "builtinHint": "Maintained by CloudCLI and read-only",
+    "updated": "{{name}} was updated.",
+    "added": "{{name}} was added.",
+    "deleted": "{{name}} was deleted."
   }
 }

@@ -1,6 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
-
-import { api } from '@/shared/api';
+import { useCallback } from 'react';
 
 type WebPushState = {
   permission: NotificationPermission | 'unsupported';
@@ -10,94 +8,17 @@ type WebPushState = {
   unsubscribe: () => Promise<void>;
 };
 
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
-
 export function useWebPush(): WebPushState {
-  const [permission, setPermission] = useState<NotificationPermission | 'unsupported'>(() => {
-    if (
-      typeof window === 'undefined'
-      || Boolean((window as any).cloudcliDesktopNotifications)
-      || !('Notification' in window)
-      || !('serviceWorker' in navigator)
-    ) {
-      return 'unsupported';
-    }
-    return Notification.permission;
-  });
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const subscribe = useCallback(async () => undefined, []);
+  const unsubscribe = useCallback(async () => undefined, []);
 
-  // Check existing subscription on mount
-  useEffect(() => {
-    if (permission === 'unsupported') return;
-
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.pushManager.getSubscription().then((sub) => {
-        setIsSubscribed(sub !== null);
-      });
-    }).catch(() => {
-      // SW not ready yet
-    });
-  }, [permission]);
-
-  const subscribe = useCallback(async () => {
-    if (permission === 'unsupported') return;
-    setIsLoading(true);
-
-    try {
-      const perm = await Notification.requestPermission();
-      setPermission(perm);
-      if (perm !== 'granted') return;
-
-      const keyRes = await api.settings.push.vapidPublicKey();
-      const { publicKey } = await keyRes.json();
-
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(publicKey).buffer as ArrayBuffer,
-      });
-
-      const subJson = subscription.toJSON();
-      await api.settings.push.subscribe({
-        endpoint: subJson.endpoint,
-        keys: subJson.keys,
-      });
-
-      setIsSubscribed(true);
-    } catch (err) {
-      console.error('Push subscribe failed:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [permission]);
-
-  const unsubscribe = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.getSubscription();
-      if (subscription) {
-        const endpoint = subscription.endpoint;
-        await subscription.unsubscribe();
-        await api.settings.push.unsubscribe(endpoint);
-      }
-      setIsSubscribed(false);
-    } catch (err) {
-      console.error('Push unsubscribe failed:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  return { permission, isSubscribed, isLoading, subscribe, unsubscribe };
+  // Push notifications require a service worker and a remote subscription
+  // endpoint, both intentionally disabled in the local browser runtime.
+  return {
+    permission: 'unsupported',
+    isSubscribed: false,
+    isLoading: false,
+    subscribe,
+    unsubscribe,
+  };
 }

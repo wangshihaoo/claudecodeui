@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 
 import { Button } from '@/shared/ui';
@@ -12,6 +13,7 @@ type ImageViewerProps = {
 
 /** Rendered by FileTree to preview an image file picked in the tree. */
 export default function ImageViewer({ file, onClose }: ImageViewerProps) {
+  const { t } = useTranslation();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,7 +44,7 @@ export default function ImageViewer({ file, onClose }: ImageViewerProps) {
           return;
         }
         console.error('Error loading image:', loadError);
-        setError('Unable to load image');
+        setError(t('fileTree.imageLoadFailed'));
       } finally {
         setLoading(false);
       }
@@ -56,7 +58,7 @@ export default function ImageViewer({ file, onClose }: ImageViewerProps) {
         URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [file.projectId, file.path]);
+  }, [file.projectId, file.path, t]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -71,7 +73,7 @@ export default function ImageViewer({ file, onClose }: ImageViewerProps) {
         <div className="flex min-h-[400px] items-center justify-center bg-gray-50 p-4 dark:bg-gray-900">
           {loading && (
             <div className="text-center text-gray-500 dark:text-gray-400">
-              <p>Loading image...</p>
+              <p>{t('fileTree.imageLoading')}</p>
             </div>
           )}
           {!loading && imageUrl && (
@@ -83,7 +85,7 @@ export default function ImageViewer({ file, onClose }: ImageViewerProps) {
           )}
           {!loading && !imageUrl && (
             <div className="text-center text-gray-500 dark:text-gray-400">
-              <p>{error || 'Unable to load image'}</p>
+              <p>{error || t('fileTree.imageLoadFailed')}</p>
               <p className="mt-2 break-all text-sm">{file.path}</p>
             </div>
           )}

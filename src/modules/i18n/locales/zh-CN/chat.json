@@ -9,7 +9,9 @@
     "copied": "消息已复制",
     "selectFormat": "选择复制格式",
     "copyAsMarkdown": "复制为 Markdown",
-    "copyAsText": "复制为纯文本"
+    "copyAsText": "复制为纯文本",
+    "markdownShort": "MD",
+    "textShort": "TXT"
   },
   "messageTypes": {
     "user": "U",
@@ -65,7 +67,15 @@
     "addTo": "将 {{entry}} 添加到允许的工具。",
     "retry": "权限已保存。重试请求以使用该工具。",
     "error": "无法更新权限。请重试。",
-    "openSettings": "打开设置"
+    "openSettings": "打开设置",
+    "required": "需要权限",
+    "tool": "工具：{{name}}",
+    "allowRule": "允许规则：{{entry}}",
+    "viewInput": "查看工具输入",
+    "deny": "拒绝",
+    "allowOnce": "允许一次",
+    "allowSaved": "允许（已保存）",
+    "allowRemember": "允许并记住"
   },
   "todo": {
     "updated": "待办列表已成功更新",
@@ -73,7 +83,12 @@
   },
   "plan": {
     "viewPlan": "📋 查看实施计划",
-    "title": "实施计划"
+    "title": "实施计划",
+    "toggle": "展开或折叠计划",
+    "generating": "正在生成计划...",
+    "rawParams": "原始参数",
+    "revise": "修改",
+    "build": "开始执行"
   },
   "usageLimit": {
     "resetAt": "Claude 使用限制已达到。您的限制将在 **{{time}} {{timezone}}** - {{date}} 重置"
@@ -82,14 +97,14 @@
     "permissionMode": "权限模式",
     "modes": {
       "default": "默认模式",
-      "auto": "Auto Mode",
+      "auto": "自动模式",
       "acceptEdits": "编辑模式",
       "bypassPermissions": "无限制模式",
       "plan": "计划模式"
     },
     "descriptions": {
       "default": "只有受信任的命令（ls、cat、grep、git status 等）自动运行。其他命令将被跳过。可以写入工作区。",
-      "auto": "A model classifier decides per tool call whether to approve or deny. Hands-off, but safer than Bypass — denials still happen.",
+      "auto": "由模型分类器逐次决定是否批准工具调用。更省事，但比“无限制”更安全——仍会拒绝部分调用。",
       "acceptEdits": "工作区内的所有命令自动运行。完全自动模式，具有沙盒执行功能。",
       "bypassPermissions": "完全的系统访问，无限制。所有命令自动运行，具有完整的磁盘和网络访问权限。请谨慎使用。",
       "plan": "计划模式 - 不执行任何命令"
@@ -129,7 +144,8 @@
       "willSend": "将在当前完成后发送",
       "edit": "编辑排队消息",
       "delete": "删除排队消息"
-    }
+    },
+    "dropFiles": "将文件拖放到此处"
   },
   "providerSelection": {
     "title": "选择您的 AI 助手",
@@ -148,7 +164,15 @@
       "opencode": "准备好使用带有 {{model}} 的 OpenCode。请在下方开始输入您的消息。",
       "default": "请在上方选择一个提供者以开始"
     },
-    "pressToSearch": "按 <kbd>{{shortcut}}</kbd> 搜索会话、文件和提交"
+    "pressToSearch": "按 <kbd>{{shortcut}}</kbd> 搜索会话、文件和提交",
+    "addModel": "添加模型",
+    "chooseModel": "选择模型",
+    "chooseModelDescription": "内置模型与自定义模型在同一列表中",
+    "clickToChange": "点击以更改模型",
+    "loadingModels": "正在加载模型…",
+    "manageModels": "管理模型",
+    "noModelsFound": "未找到模型。",
+    "searchModels": "搜索模型..."
   },
   "session": {
     "continue": {
@@ -201,30 +225,30 @@
   },
   "claudeStatus": {
     "actions": {
-      "thinking": "Thinking",
-      "processing": "Processing",
-      "analyzing": "Analyzing",
-      "working": "Working",
-      "computing": "Computing",
-      "reasoning": "Reasoning"
+      "thinking": "思考中",
+      "processing": "处理中",
+      "analyzing": "分析中",
+      "working": "工作中",
+      "computing": "计算中",
+      "reasoning": "推理中"
     },
     "state": {
-      "live": "Live",
-      "paused": "Paused"
+      "live": "进行中",
+      "paused": "已暂停"
     },
     "elapsed": {
-      "seconds": "{{count}}s",
-      "minutesSeconds": "{{minutes}}m {{seconds}}s",
-      "label": "{{time}} elapsed",
-      "startingNow": "Starting now"
+      "seconds": "{{count}} 秒",
+      "minutesSeconds": "{{minutes}} 分 {{seconds}} 秒",
+      "label": "已用时 {{time}}",
+      "startingNow": "刚刚开始"
     },
     "stop": "停止",
     "controls": {
-      "stopGeneration": "Stop Generation",
-      "pressEscToStop": "Press Esc anytime to stop"
+      "stopGeneration": "停止生成",
+      "pressEscToStop": "随时按 Esc 停止"
     },
     "providers": {
-      "assistant": "Assistant"
+      "assistant": "助手"
     }
   },
   "projectSelection": {
@@ -242,7 +266,13 @@
       "title": "正在替换先前的消息",
       "filesNotReverted": "已修改的文件不会被还原",
       "cancel": "取消"
-    }
+    },
+    "effortDefault": "默认",
+    "loadingModels": "正在加载模型…",
+    "model": "模型",
+    "modelMenu": "选择模型和推理强度",
+    "permissionHeading": "应如何批准 {{provider}} 的操作？",
+    "reasoning": "推理"
   },
   "export": {
     "trigger": "导出对话",
@@ -276,5 +306,120 @@
     "failed": "未发送 — {{reason}}",
     "cancel": "取消定时消息",
     "dismiss": "关闭失败提示"
+  },
+  "interactive": {
+    "instruction": "请在运行 Claude 的终端中选择一个选项。",
+    "instructionDetail": "在 CLI 中，你可以使用方向键或输入数字来交互选择此选项。",
+    "selectedOption": "✓ Claude 选择了选项 {{number}}",
+    "title": "交互提示",
+    "waiting": "正在等待你在 CLI 中的回复",
+    "selectAllThatApply": "可多选"
+  },
+  "misc": {
+    "availableCommands": "可用命令",
+    "cancelEditing": "取消编辑",
+    "choiceSavedDefault": "你的选择将成为新聊天的默认模型。",
+    "choiceSavedHint": "你的选择会保存到本次会话，并成为新聊天的默认值。",
+    "choiceSavedSession": "你的选择会保存到本次会话，并成为新聊天的默认值。",
+    "close": "关闭",
+    "closeImagePreview": "关闭图片预览",
+    "closeModal": "关闭命令结果对话框",
+    "copyCommand": "复制命令",
+    "copyToClipboard": "复制到剪贴板",
+    "docsSearchSubtitle": "搜索内置命令、语法模式和用法，无需离开聊天。",
+    "enterModelInfo": "请同时输入模型名称和模型 ID。",
+    "escClosesModal": "按 Esc 关闭对话框。",
+    "expandImage": "展开 {{name}}",
+    "exportChat": "导出聊天",
+    "fallbackCommands": {
+      "config": "打开设置和配置。",
+      "cost": "查看当前会话的 token 用量。",
+      "help": "显示命令文档和语法。",
+      "memory": "打开项目的 CLAUDE.md 记忆文件。",
+      "models": "浏览当前提供商的可用模型。",
+      "status": "查看运行时、版本、提供商和环境状态。"
+    },
+    "filterCommands": "筛选命令...",
+    "modalMeta": {
+      "commandResult": "命令结果",
+      "costEyebrow": "会话遥测",
+      "costSubtitle": "此会话的输入、输出和总 token 数量。",
+      "costTitle": "Token 用量",
+      "helpEyebrow": "命令中心",
+      "helpSubtitle": "搜索内置命令、语法模式和用法，无需离开聊天。",
+      "helpTitle": "帮助与快捷键",
+      "modelsEyebrow": "模型选择",
+      "modelsSubtitle": "选择此提供商应使用的模型。",
+      "modelsTitle": "选择模型",
+      "statusEyebrow": "运行状况",
+      "statusSubtitle": "在一处查看版本、提供商、运行时和环境信息。",
+      "statusTitle": "系统状态"
+    },
+    "modelChangeFailed": "现在无法更改模型。",
+    "modelDeleteFailed": "无法删除此模型。",
+    "modelSaveFailed": "无法保存此模型。",
+    "noDescription": "暂无描述。",
+    "runningTask": "正在运行任务",
+    "showTokenUsage": "显示 token 用量",
+    "skipAll": "全部跳过",
+    "skipOne": "跳过",
+    "tokensLabel_one": "个 token",
+    "tokensLabel_other": "个 token",
+    "tokensUsed_one": "已使用 {{count}} 个 token",
+    "tokensUsed_other": "已使用 {{count}} 个 token",
+    "typeAnswer": "输入你的回答...",
+    "userAskedRevise": "用户要求修改计划",
+    "userDeniedTool": "用户拒绝使用该工具"
+  },
+  "commandMenu": {
+    "empty": "没有可用命令",
+    "namespaces": {
+      "frequent": "常用",
+      "builtin": "内置命令",
+      "skill": "技能",
+      "project": "项目命令",
+      "user": "用户命令",
+      "other": "其他命令"
+    }
+  },
+  "reasoning": {
+    "thinking": "思考中...",
+    "thoughtBriefly": "思考了几秒",
+    "thoughtSeconds": "思考了 {{count}} 秒"
+  },
+  "attachments": {
+    "unnamedFile": "附件",
+    "unnamedImage": "附图",
+    "fileAttachment": "文件附件"
+  },
+  "modelLibrary": {
+    "title": "模型库",
+    "description": "添加提供商支持的模型 ID。内置模型保持锁定。",
+    "back": "返回模型列表",
+    "editTitle": "编辑自定义模型",
+    "addTitle": "添加自定义模型",
+    "idHint": "该 ID 会按原样发送给 {{provider}}。",
+    "nameLabel": "模型名称",
+    "namePlaceholder": "例如 GPT-5.5 Pro",
+    "idLabel": "模型 ID",
+    "idPlaceholder": "例如 gpt-5.5-pro",
+    "idHelp": "请填写提供商 CLI 接受的完整标识符。ID 不能包含空格。",
+    "idNoSpaces": "模型 ID 不能包含空格。",
+    "saving": "保存中…",
+    "saveChanges": "保存更改",
+    "addModel": "添加模型",
+    "yourModels": "你的模型",
+    "yourModelsHint": "可编辑，保存在本地",
+    "emptyTitle": "还没有自定义模型",
+    "emptyHint": "用左侧表单添加后，会出现在所有模型选择器中。",
+    "customBadge": "自定义",
+    "editAria": "编辑 {{name}}",
+    "deleteAria": "删除 {{name}}",
+    "confirmDelete": "从所有选择器中删除此模型？",
+    "builtinTitle": "内置模型",
+    "builtinHint": "由 CloudCLI 维护，只读",
+    "updated": "已更新 {{name}}。",
+    "added": "已添加 {{name}}。",
+    "deleted": "已删除 {{name}}。"
   }
 }

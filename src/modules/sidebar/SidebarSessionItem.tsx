@@ -178,7 +178,7 @@ function SidebarSessionItem({
 
             <button
               type="button"
-              aria-label={`Session options for ${sessionView.sessionName}`}
+              aria-label={t('sessions.optionsFor', { name: sessionView.sessionName })}
               aria-haspopup="dialog"
               aria-expanded={isMobileOptionsOpen}
               className="ml-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted active:scale-95"
@@ -198,7 +198,7 @@ function SidebarSessionItem({
             animationClassName="animate-bottom-sheet-content-show motion-reduce:animate-none"
             className="bottom-0 left-0 top-auto max-w-none translate-x-0 translate-y-0 rounded-b-none rounded-t-2xl border-x-0 border-b-0 px-4 pb-safe-area-inset-bottom pt-3"
           >
-            <DialogTitle>Session options</DialogTitle>
+            <DialogTitle>{t('sessions.options')}</DialogTitle>
             <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-muted-foreground/30" aria-hidden="true" />
 
             <div className="mb-4 flex items-center gap-3 px-1">
@@ -210,7 +210,7 @@ function SidebarSessionItem({
                   {sessionView.sessionName}
                 </p>
                 <p id="mobile-session-options-description" className="text-xs text-muted-foreground">
-                  {providerLabel} session
+                  {t('sessions.providerSession', { provider: providerLabel })}
                 </p>
               </div>
             </div>
@@ -218,7 +218,7 @@ function SidebarSessionItem({
             {isEditing ? (
               <div className="mb-3 space-y-2">
                 <label htmlFor={`mobile-session-rename-${session.id}`} className="block px-1 text-xs font-medium text-muted-foreground">
-                  Session name
+                  {t('sessions.nameLabel')}
                 </label>
                 <input
                   id={`mobile-session-rename-${session.id}`}
@@ -244,7 +244,7 @@ function SidebarSessionItem({
                     className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-transform active:scale-95"
                   >
                     <Check className="h-5 w-5 flex-shrink-0" />
-                    Save
+                    {t('actions.save')}
                   </button>
                   <button
                     type="button"
@@ -252,7 +252,7 @@ function SidebarSessionItem({
                     className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-muted/35 px-4 py-3 text-sm font-medium text-foreground transition-colors active:bg-muted"
                   >
                     <X className="h-5 w-5 flex-shrink-0" />
-                    Cancel
+                    {t('actions.cancel')}
                   </button>
                 </div>
               </div>
@@ -264,7 +264,7 @@ function SidebarSessionItem({
                   className="flex min-h-12 w-full items-center gap-3 rounded-xl border border-border bg-muted/35 px-4 py-3 text-left text-foreground transition-colors active:bg-muted"
                 >
                   <Edit2 className="h-5 w-5 flex-shrink-0" />
-                  <span className="text-sm font-medium">Rename session</span>
+                  <span className="text-sm font-medium">{t('sessions.renameSession')}</span>
                 </button>
 
                 <button
@@ -288,7 +288,7 @@ function SidebarSessionItem({
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-medium">{copyLabel}</span>
                     {copyState === 'error' && (
-                      <span className="mt-0.5 block text-xs">Tap to try again.</span>
+                      <span className="mt-0.5 block text-xs">{t('sessions.copyRetryTap')}</span>
                     )}
                   </span>
                 </button>
@@ -303,7 +303,7 @@ function SidebarSessionItem({
                     className="flex min-h-12 w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-red-600 transition-colors active:bg-red-500/10 dark:text-red-400"
                   >
                     <Trash2 className="h-5 w-5 flex-shrink-0" />
-                    <span className="text-sm font-medium">Archive or delete session</span>
+                    <span className="text-sm font-medium">{t('sessions.archiveOrDelete')}</span>
                   </button>
                 )}
               </div>
@@ -315,7 +315,7 @@ function SidebarSessionItem({
                 onClick={() => setMobileOptionsOpen(false)}
                 className="mb-3 mt-2 min-h-11 w-full rounded-xl text-sm font-medium text-muted-foreground transition-colors active:bg-muted"
               >
-                Cancel
+                {t('actions.cancel')}
               </button>
             )}
           </DialogContent>

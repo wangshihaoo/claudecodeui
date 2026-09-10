@@ -12,6 +12,7 @@ import { copyTextToClipboard } from '@/shared/utils';
 import { TERMINAL_INIT_DELAY_MS } from '@/shared/constants';
 import { installMobileTerminalSelection } from '@/modules/shell/utils/mobileTerminalSelection';
 import { sendSocketMessage } from '@/modules/shell/utils/socket';
+import type { ShellSocket } from '@/modules/shell/utils/socket';
 import { ensureXtermFocusStyles } from '@/modules/shell/utils/terminalStyles';
 
 const TERMINAL_RESIZE_DELAY_MS = 50;
@@ -114,7 +115,7 @@ type UseShellTerminalOptions = {
   terminalContainerRef: RefObject<HTMLDivElement>;
   terminalRef: MutableRefObject<Terminal | null>;
   fitAddonRef: MutableRefObject<FitAddon | null>;
-  wsRef: MutableRefObject<WebSocket | null>;
+  wsRef: MutableRefObject<ShellSocket | null>;
   selectedProject: Project | null | undefined;
   minimal: boolean;
   isRestarting: boolean;

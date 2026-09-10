@@ -154,5 +154,79 @@
     "viewAllTasks": "View all tasks",
     "allComplete": "All tasks complete",
     "noPending": "No pending tasks"
+  },
+  "board": {
+    "dependsOn": "Depends on: {{ids}}",
+    "dependsOnTooltip": "Depends on: {{tasks}}",
+    "parentTask": "Task {{id}}",
+    "statusLabel": "Status: {{status}}",
+    "progress": "Progress:",
+    "subtasksCompleted": "{{completed}} of {{total}} subtasks completed",
+    "status": {
+      "done": "Done",
+      "inProgress": "In Progress",
+      "review": "Review",
+      "deferred": "Deferred",
+      "cancelled": "Cancelled",
+      "pending": "Pending"
+    },
+    "priority": {
+      "high": "High priority",
+      "medium": "Medium priority",
+      "low": "Low priority",
+      "none": "No priority set"
+    },
+    "taskId": "Task ID: {{id}}"
+  },
+  "detail": {
+    "noDependencies": "No dependencies",
+    "description": "Description",
+    "noDescription": "No description provided",
+    "implementationDetails": "Implementation Details",
+    "testStrategy": "Test Strategy",
+    "status": "Status",
+    "priority": "Priority",
+    "priorityNotSet": "Not set",
+    "dependencies": "Dependencies",
+    "copyId": "Copy task ID",
+    "save": "Save",
+    "cancelEditing": "Cancel editing",
+    "edit": "Edit task",
+    "close": "Close"
+  },
+  "createModal": {
+    "title": "Create AI-Generated Task",
+    "proTip": "Pro tip: ask Claude Code directly",
+    "proTipBody": "Ask for a task in chat with context and requirements. TaskMaster can generate implementation-ready tasks.",
+    "example": "Example:",
+    "examplePrompt": "Please add a task for profile image uploads and include best-practice research.",
+    "viewDocs": "View TaskMaster documentation",
+    "gotIt": "Got it"
+  },
+  "prdEditor": {
+    "generateTasks": "Generate Tasks",
+    "generateTasksTitle": "Generate tasks from PRD content",
+    "saved": "Saved!",
+    "saving": "Saving...",
+    "savePrd": "Save PRD",
+    "lines": "Lines: {{count}}",
+    "characters": "Characters: {{count}}",
+    "words": "Words: {{count}}",
+    "formatMarkdown": "Format: Markdown",
+    "shortcutHint": "Press Ctrl+S to save and Esc to close",
+    "loading": "Loading PRD...",
+    "filenamePlaceholder": "Enter PRD filename",
+    "focusFilename": "Focus filename input",
+    "newBadge": "New",
+    "subtitle": "Product Requirements Document",
+    "switchToEdit": "Switch to edit mode",
+    "previewMarkdown": "Preview markdown",
+    "disableWrap": "Disable word wrap",
+    "enableWrap": "Enable word wrap",
+    "toggleTheme": "Toggle theme",
+    "download": "Download PRD",
+    "close": "Close",
+    "exitFullscreen": "Exit fullscreen",
+    "enterFullscreen": "Enter fullscreen"
   }
 }

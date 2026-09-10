@@ -1068,9 +1068,14 @@ export type WizardFormState = {
 
 //----------------- PROJECT WORKSPACE ------------
 
-/** The shared WebSocket connection and its send function, threaded through the workspace tree so descendants can exchange live session messages. */
+/** A transport marker threaded through the workspace tree so descendants can exchange live local-session messages. */
+export type RealtimeConnection = {
+  readonly transport: 'local-runtime';
+};
+
+/** The shared local realtime connection and its send function, threaded through the workspace tree so descendants can exchange live session messages. */
 export type RealtimeProps = {
-  ws: WebSocket | null;
+  ws: RealtimeConnection | null;
   sendMessage: (message: unknown) => void;
 };
 

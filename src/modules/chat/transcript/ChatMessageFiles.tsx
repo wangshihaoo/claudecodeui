@@ -1,5 +1,6 @@
 import { DownloadIcon, FileArchiveIcon, FileCodeIcon, FileIcon, FileTextIcon } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { api } from '@/shared/api';
 import type { ChatAttachment } from '@/shared/types';
@@ -25,8 +26,9 @@ const getFileIcon = (file: ChatAttachment) => {
 };
 
 function ChatMessageFile({ file }: { file: ChatAttachment }) {
+  const { t } = useTranslation('chat');
   const [isDownloading, setIsDownloading] = useState(false);
-  const name = file.name || file.path?.split(/[\\/]/).pop() || 'Attached file';
+  const name = file.name || file.path?.split(/[\\/]/).pop() || t('attachments.unnamedFile');
   const FileTypeIcon = getFileIcon(file);
   const size = formatFileSize(file.size);
 
@@ -65,7 +67,7 @@ function ChatMessageFile({ file }: { file: ChatAttachment }) {
       </div>
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium text-foreground" title={name}>{name}</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">{size || 'File attachment'}</p>
+        <p className="mt-0.5 text-xs text-muted-foreground">{size || t('attachments.fileAttachment')}</p>
       </div>
       <DownloadIcon
         className={`h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover/file:text-foreground ${

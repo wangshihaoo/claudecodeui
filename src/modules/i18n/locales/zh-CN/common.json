@@ -24,7 +24,8 @@
     "git": "源代码管理",
     "tasks": "任务",
     "browser": "浏览器",
-    "computer": "计算机"
+    "computer": "计算机",
+    "views": "工作区视图"
   },
   "status": {
     "loading": "加载中...",
@@ -53,7 +54,9 @@
     "back": "返回",
     "next": "下一步",
     "previous": "上一步",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "scrollTabsLeft": "向左滚动标签",
+    "scrollTabsRight": "向右滚动标签"
   },
   "common": {
     "language": "语言",
@@ -68,7 +71,10 @@
     "version": "版本",
     "select": "选择",
     "selectAll": "全选",
-    "deselectAll": "取消全选"
+    "deselectAll": "取消全选",
+    "done": "完成",
+    "failed": "失败",
+    "cancel": "取消"
   },
   "time": {
     "justNow": "刚刚",
@@ -132,6 +138,41 @@
       "refresh": "刷新",
       "menuLabel": "文件上下文菜单",
       "loading": "加载中..."
+    },
+    "loadFailed": "无法加载文件",
+    "uploadingFiles": "正在上传文件",
+    "uploadComplete": "上传完成",
+    "uploadFailed": "上传失败",
+    "uploadedCount": "已上传 {{uploaded}} / {{total}} {{label}}",
+    "uploadToFolder": "上传文件到“{{folder}}”",
+    "uploadFiles": "上传文件（每个最大 {{size}}）",
+    "dropToUploadTo": "拖放文件以上传到“{{folder}}”",
+    "dropToUpload": "拖放文件以上传",
+    "imageLoading": "正在加载图片...",
+    "imageLoadFailed": "无法加载图片",
+    "delete": {
+      "title": "删除{{type}}",
+      "folder": "文件夹",
+      "file": "文件",
+      "folderWarning": "此文件夹及其全部内容将被永久删除。",
+      "fileWarning": "此文件将被永久删除。",
+      "confirm": "删除"
+    },
+    "validation": {
+      "emptyName": "文件名不能为空",
+      "invalidChars": "文件名包含无效字符",
+      "reserved": "文件名是保留名称",
+      "dotsOnly": "文件名不能只由点组成"
+    },
+    "toast": {
+      "renamed": "重命名成功",
+      "folderDeleted": "文件夹已删除",
+      "fileDeleted": "文件已删除",
+      "fileCreated": "文件创建成功",
+      "folderCreated": "文件夹创建成功",
+      "copyFailed": "复制路径失败",
+      "pathCopied": "路径已复制到剪贴板",
+      "folderDownloaded": "文件夹已下载为 ZIP"
     }
   },
   "projectWizard": {
@@ -265,6 +306,88 @@
       "settings": "设置",
       "updateAvailable": "有可用更新",
       "closeSidebar": "关闭侧边栏"
-    }
+    },
+    "connectionInterrupted": "与服务器的连接已中断 — 可能正在重启以应用更新。",
+    "refreshIn_one": "窗口将在 {{count}} 秒后刷新。如果更新未生效，请重启环境。",
+    "refreshIn_other": "窗口将在 {{count}} 秒后刷新。如果更新未生效，请重启环境。",
+    "refreshNow": "正在刷新窗口...",
+    "startingUpdate": "正在开始更新...",
+    "unexpectedResponse": "更新接口返回了意外响应（HTTP {{status}}）。请使用下方命令手动更新。",
+    "unknownError": "未知错误",
+    "updateStartedRestarting": "更新已开始。服务器似乎正在重启以应用更新。"
+  },
+  "cancel": "取消",
+  "commandPalette": {
+    "backToAll": "返回全部",
+    "backspaceHint": "按退格键返回",
+    "browseAllBranches": "浏览全部分支（{{count}}）",
+    "browseAllCommits": "浏览全部提交（{{count}}）",
+    "browseAllFiles": "浏览全部文件（{{count}}）",
+    "browseAllSessions": "浏览全部会话（{{count}}）",
+    "gitFetch": "Git：获取",
+    "gitPull": "Git：拉取",
+    "gitPush": "Git：推送",
+    "groupActions": "操作",
+    "groupBranches": "分支",
+    "groupCommits": "提交",
+    "groupFiles": "文件",
+    "groupGit": "Git",
+    "groupNavigate": "导航",
+    "groupSessions": "会话",
+    "groupSettings": "设置",
+    "navChat": "转到聊天",
+    "navFiles": "转到文件",
+    "navGit": "转到 Git",
+    "navShell": "转到终端",
+    "navTasks": "转到任务",
+    "noResults": "没有结果。",
+    "openSettings": "打开设置",
+    "pages": {
+      "actions": "操作",
+      "branches": "分支",
+      "commits": "提交",
+      "files": "文件",
+      "sessions": "会话"
+    },
+    "searchAnything": "输入以搜索任何内容…",
+    "searchPage": "搜索{{page}}…",
+    "selectProjectFirst": "请先选择一个项目",
+    "settingsItem": "设置：{{label}}",
+    "startNewChat": "开始新聊天",
+    "switchTo": "切换到：{{name}}",
+    "title": "命令面板",
+    "toggleTheme": "切换主题"
+  },
+  "folderBrowser": {
+    "create": "创建",
+    "createFailed": "创建文件夹失败",
+    "createNew": "新建文件夹",
+    "hideHidden": "隐藏隐藏文件夹",
+    "loadFailed": "加载文件夹失败",
+    "newFolderPlaceholder": "新文件夹名称",
+    "noSubfolders": "没有子文件夹",
+    "pathLabel": "路径：",
+    "select": "选择",
+    "showHidden": "显示隐藏文件夹",
+    "title": "选择文件夹",
+    "useThisFolder": "使用此文件夹"
+  },
+  "misc": {
+    "browseFolders": "浏览文件夹",
+    "close": "关闭",
+    "closeLoginModal": "关闭登录对话框",
+    "completedBadge": "（已完成）",
+    "errorDescription": "加载聊天界面时发生错误。",
+    "errorDetails": "错误详情",
+    "errorTitle": "出错了",
+    "hideToken": "隐藏令牌",
+    "noProjectSelected": "未选择项目",
+    "openMenu": "打开菜单",
+    "pluginLoadFailed": "插件加载失败：{{error}}",
+    "projectFallback": "项目",
+    "projectRequiredForShell": "打开终端需要先选择项目",
+    "showToken": "显示令牌",
+    "tryAgain": "重试",
+    "unknownProvider": "未知"
   }
 }

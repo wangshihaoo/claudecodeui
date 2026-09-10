@@ -141,8 +141,8 @@ export default function SessionOptions({
         </>
       ) : (
         <ActionMenu
-          label="Session options"
-          ariaLabel={`Session options for ${sessionName}`}
+          label={t('sessions.options')}
+          ariaLabel={t('sessions.optionsFor', { name: sessionName })}
           icon={MoreHorizontal}
           iconOnly
           portal
@@ -156,20 +156,20 @@ export default function SessionOptions({
               <p className="truncate text-xs font-medium text-foreground" title={sessionName}>
                 {sessionName}
               </p>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">{providerLabel} session</p>
+              <p className="mt-0.5 text-[11px] text-muted-foreground">{t('sessions.providerSession', { provider: providerLabel })}</p>
             </div>
           )}
           items={[
             ...(projectId !== null ? [{
               key: 'rename',
-              label: 'Rename session',
+              label: t('sessions.renameSession'),
               icon: Edit2,
               onSelect: () => onStartEditingSession(projectId, sessionId, sessionName),
             }] : []),
             {
               key: 'copy',
               label: copyLabel,
-              description: copyState === 'error' ? 'Click to try again.' : undefined,
+              description: copyState === 'error' ? t('sessions.copyRetry') : undefined,
               icon: CopyStateIcon,
               loading: isCopyPending,
               closeOnSelect: false,
@@ -177,14 +177,14 @@ export default function SessionOptions({
             },
             ...(canFork && onFork ? [{
               key: 'fork',
-              label: 'Fork session',
-              description: 'Continue from a copy, leaving this one untouched.',
+              label: t('sessions.fork'),
+              description: t('sessions.forkDescription'),
               icon: GitBranch,
               onSelect: onFork,
             }] : []),
             ...(canDelete && !isProcessing ? [{
               key: 'delete',
-              label: 'Archive or delete session',
+              label: t('sessions.archiveOrDelete'),
               icon: Trash2,
               isDanger: true,
               showDividerBefore: true,

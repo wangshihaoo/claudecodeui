@@ -5,14 +5,14 @@ import type { Terminal } from '@xterm/xterm';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useShellConnection } from '@/modules/shell/hooks/useShellConnection';
+import type { ShellSocket } from '@/modules/shell/utils/socket';
 import type { Project, ProjectSession } from '@/shared/types';
 
-// Only the URL builder is stubbed: it reads a stored auth token and would bail
-// before a socket is ever constructed. `parseShellMessage` stays real, because
-// what is under test is how a parsed frame is dispatched.
+// Replace the local transport with a controllable fake; `parseShellMessage`
+// stays real because what is under test is how a parsed frame is dispatched.
 vi.mock('@/modules/shell/utils/socket', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
-  getShellWebSocketUrl: () => 'ws://localhost/shell',
+  createLocalShellSocket: () => new FakeSocket(),
 }));
 
 class FakeSocket {
@@ -48,7 +48,7 @@ function renderConnection() {
 
   const view = renderHook(() =>
     useShellConnection({
-      wsRef: ref<WebSocket | null>(null),
+      wsRef: ref<ShellSocket | null>(null),
       terminalRef,
       fitAddonRef: ref({ fit: vi.fn() } as unknown as FitAddon | null),
       selectedProjectRef: ref<Project | null | undefined>({
@@ -80,11 +80,10 @@ function renderConnection() {
 describe('shell socket error frames', () => {
   beforeEach(() => {
     FakeSocket.last = null;
-    vi.stubGlobal('WebSocket', FakeSocket);
   });
 
   afterEach(() => {
-    vi.unstubAllGlobals();
+    vi.clearAllMocks();
   });
 
   it('writes the server error into the terminal instead of dropping it', () => {

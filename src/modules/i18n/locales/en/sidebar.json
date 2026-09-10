@@ -32,7 +32,17 @@
     "loadingSessions": "Loading sessions...",
     "unnamed": "Unnamed",
     "loading": "Loading...",
-    "showMore": "Show more sessions"
+    "showMore": "Show more sessions",
+    "loadMore": "Load more sessions",
+    "options": "Session options",
+    "optionsFor": "Session options for {{name}}",
+    "providerSession": "{{provider}} session",
+    "nameLabel": "Session name",
+    "fork": "Fork session",
+    "forkDescription": "Continue from a copy, leaving this one untouched.",
+    "archiveOrDelete": "Archive or delete session",
+    "copyRetry": "Click to try again.",
+    "copyRetryTap": "Tap to try again."
   },
   "tooltips": {
     "viewEnvironments": "View Environments",
@@ -50,7 +60,8 @@
     "cancel": "Cancel",
     "clearSearch": "Clear search",
     "openCommandPalette": "Open command palette",
-    "attentionRequiredIndicator": "Session needs attention"
+    "attentionRequiredIndicator": "Session needs attention",
+    "processingSessionIndicator": "Processing session"
   },
   "navigation": {
     "chat": "Chat",
@@ -132,7 +143,12 @@
     "matches_one": "{{count}} match",
     "matches_other": "{{count}} matches",
     "projectsScanned_one": "{{count}} project scanned",
-    "projectsScanned_other": "{{count}} projects scanned"
+    "projectsScanned_other": "{{count}} projects scanned",
+    "archivedPlaceholder": "Search archived sessions...",
+    "runningPlaceholder": "Search running sessions...",
+    "runningTooltip": "Running sessions",
+    "archiveOnlyTooltip": "Archive only",
+    "modeRunning": "Running"
   },
   "recent": {
     "title": "Recent conversations",
@@ -157,5 +173,42 @@
     "deleteAllData": "Delete all data permanently",
     "allConversationsDeleted": "The project will be removed from the sidebar. Your files, memories, and session data will be preserved.",
     "cannotUndo": "You can re-add the project later."
+  },
+  "copySessionId": {
+    "loading": "Loading {{provider}} session ID…",
+    "copied": "{{provider}} session ID copied",
+    "copyFailed": "Couldn't copy {{provider}} session ID",
+    "unavailable": "{{provider}} session ID unavailable",
+    "copy": "Copy {{provider}} session ID"
+  },
+  "running": {
+    "emptyTitle": "No sessions running",
+    "noMatchingSessions": "No running sessions match this search.",
+    "emptyDescription": "Active work will appear here while a provider is processing.",
+    "title": "Running now"
+  },
+  "archived": {
+    "loadingTitle": "Loading archive...",
+    "loadingDescription": "Fetching hidden workspaces and sessions you can restore later.",
+    "noMatchingSessions": "No matching archived items",
+    "emptyTitle": "No archived items",
+    "tryDifferentSearch": "Try a different search term.",
+    "emptyDescription": "Archived workspaces and sessions will appear here when you hide them from the active list.",
+    "title": "Archive",
+    "restoreHint": "Restore items whenever you need them",
+    "restoreProject": "Restore workspace",
+    "restoreAction": "Restore",
+    "restore": "Restore session",
+    "deletePermanently": "Delete permanently"
+  },
+  "taskMaster": {
+    "ready": "TaskMaster Ready",
+    "readyTitle": "TaskMaster fully configured with MCP server",
+    "init": "TaskMaster Init",
+    "initTitle": "TaskMaster initialized, MCP server needs setup",
+    "mcpReady": "MCP Ready",
+    "mcpTitle": "MCP server configured, TaskMaster needs initialization",
+    "none": "No TaskMaster",
+    "noneTitle": "TaskMaster not configured"
   }
 }

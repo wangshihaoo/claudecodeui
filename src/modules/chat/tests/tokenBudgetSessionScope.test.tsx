@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 
-import { renderHook } from '@testing-library/react';
-import { test } from 'vitest';
+import { act, renderHook } from '@testing-library/react';
+import { afterEach, test, vi } from 'vitest';
 
 import { useChatRealtimeHandlers } from '@/modules/chat/hooks/useChatRealtimeHandlers';
+import { createSessionStreamBuffer } from '@/modules/chat/utils/sessionStreamBuffer';
 import type { ServerEvent, ProjectSession } from '@/shared/types';
 import type { SessionStore } from '@/modules/chat/hooks/useSessionStore';
 
@@ -31,8 +32,7 @@ const renderHandlers = () => {
     setTokenBudget: (budget) => budgets.push(budget),
     pendingPermissionRequests: [],
     setPendingPermissionRequests: () => {},
-    streamTimerRef: { current: null },
-    accumulatedStreamRef: { current: '' },
+    streamBufferRef: { current: createSessionStreamBuffer() },
     lastSeqRef: { current: new Map() },
     statusCheckSentAtRef: { current: new Map() },
     requestLatestMessages: async () => {},
@@ -65,4 +65,48 @@ test('ignores token budgets from other running sessions', () => {
   dispatch(budgetEvent('some-other-session'));
 
   assert.equal(budgets.length, 0);
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
+
+test('batches non-active stream deltas without appending raw chunks', async () => {
+  vi.useFakeTimers();
+
+  let listener: ((event: ServerEvent) => void) | null = null;
+  const appendRealtime = vi.fn();
+  const updateStreaming = vi.fn();
+  const finalizeStreaming = vi.fn();
+
+  renderHook(() => useChatRealtimeHandlers({
+    isActive: true,
+    subscribe: (fn) => {
+      listener = fn;
+      return () => { listener = null; };
+    },
+    provider: 'claude',
+    selectedSession: { id: 'viewed-session' } as ProjectSession,
+    currentSessionId: 'viewed-session',
+    setTokenBudget: () => {},
+    pendingPermissionRequests: [],
+    setPendingPermissionRequests: () => {},
+    streamBufferRef: { current: createSessionStreamBuffer() },
+    lastSeqRef: { current: new Map() },
+    statusCheckSentAtRef: { current: new Map() },
+    requestLatestMessages: async () => {},
+    sessionStore: { appendRealtime, updateStreaming, finalizeStreaming } as unknown as SessionStore,
+  }));
+
+  act(() => {
+    listener?.({ kind: 'stream_delta', sessionId: 'background-session', content: 'A' });
+    listener?.({ kind: 'stream_delta', sessionId: 'background-session', content: 'B' });
+  });
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(100);
+  });
+
+  assert.equal(appendRealtime.mock.calls.length, 0);
+  assert.deepEqual(updateStreaming.mock.calls, [['background-session', 'AB', 'claude']]);
+  assert.equal(finalizeStreaming.mock.calls.length, 0);
 });

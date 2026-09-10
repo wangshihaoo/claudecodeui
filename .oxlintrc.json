@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": ["dist/**", "dist-server/**", "node_modules/**", "public/**"],
+  "ignorePatterns": ["dist/**", "node_modules/**", "public/**"],
 
   // Rust-native plugins. oxlint's "import" plugin is the port of eslint-plugin-import-x,
   // and "react" also carries the react-hooks rules.
@@ -24,9 +24,8 @@
     // (the plugin hardcodes its own name), even though the plugin is aliased to "importx".
     "import-x/resolver": {
       "typescript": {
-        "project": ["tsconfig.json", "server/tsconfig.json"],
-        "alwaysTryTypes": true,
-        "noWarnOnMultipleProjects": true
+        "project": ["tsconfig.json"],
+        "alwaysTryTypes": true
       },
       "node": { "extensions": [".mjs", ".cjs", ".js", ".json", ".node", ".ts", ".tsx"] }
     },
@@ -34,15 +33,12 @@
     // classic "import/resolver" key instead.
     "import/resolver": {
       "typescript": {
-        "project": ["tsconfig.json", "server/tsconfig.json"],
-        "alwaysTryTypes": true,
-        "noWarnOnMultipleProjects": true
+        "project": ["tsconfig.json"],
+        "alwaysTryTypes": true
       },
       "node": { "extensions": [".mjs", ".cjs", ".js", ".json", ".node", ".ts", ".tsx"] }
     },
     "boundaries/include": [
-      "server/**/*.js",
-      "server/**/*.ts",
       "src/modules/**/*.ts",
       "src/modules/**/*.tsx",
       "src/shared/*.ts",
@@ -54,33 +50,6 @@
       "src/shared/ui/**/*.tsx"
     ],
     "boundaries/elements": [
-      {
-        "type": "backend-shared-barrel",
-        "pattern": "server/shared/index.ts",
-        "mode": "file"
-      },
-      {
-        "type": "backend-shared-type-contract",
-        "pattern": ["server/shared/types.{js,ts}", "server/shared/interfaces.{js,ts}"],
-        "mode": "file"
-      },
-      {
-        "type": "backend-shared-utils",
-        "pattern": [
-          "server/shared/utils.{js,ts}",
-          "server/shared/frontmatter.ts",
-          "server/shared/claude-cli-path.ts",
-          "server/shared/image-attachments.ts",
-          "server/shared/message-unification.ts"
-        ],
-        "mode": "file"
-      },
-      {
-        "type": "backend-module",
-        "pattern": "server/modules/*",
-        "mode": "folder",
-        "capture": ["moduleName"]
-      },
       {
         "type": "frontend-shared-type-contract",
         "pattern": "src/shared/types.ts",
@@ -252,64 +221,6 @@
               {
                 "to": { "type": "frontend-module" },
                 "allow": { "to": { "internalPath": ["index", "index.{ts,tsx}"] } }
-              }
-            ]
-          }
-        ],
-        "boundaries/no-unknown": "error"
-      }
-    },
-    {
-      "files": ["server/**/*.js", "server/**/*.ts"],
-      "excludeFiles": ["server/**/*.d.ts"],
-      "rules": {
-        "no-unused-vars": "off",
-
-        // eslint:recommended rules that the old ESLint server block never extended, so
-        // these surface pre-existing code as new findings. Kept at "warn" instead of the
-        // inherited "error" so the swap does not turn `npm run lint` red; each one is a
-        // real issue worth fixing, then promoting back to "error".
-        "no-async-promise-executor": "warn",
-        "no-extra-boolean-cast": "warn",
-        "no-unsafe-optional-chaining": "warn",
-
-        // --- Import hygiene (backend) ---
-        "import/no-duplicates": "warn",
-        "importx/order": [
-          "warn",
-          {
-            "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
-            "newlines-between": "always"
-          }
-        ],
-        "importx/no-unresolved": "error",
-        "importx/no-useless-path-segments": "warn",
-        "import/no-absolute-path": "error",
-
-        // --- General safety/style (backend) ---
-        "eqeqeq": ["warn", "always", { "null": "ignore" }],
-
-        // --- Architecture boundaries (backend modules) ---
-        "boundaries/dependencies": [
-          "error",
-          {
-            "default": "allow",
-            "checkInternals": false,
-            "rules": [
-              {
-                "from": { "type": "backend-module" },
-                "to": { "type": "backend-shared-type-contract" },
-                "disallow": { "dependency": { "kind": ["value", "typeof"] } },
-                "message": "Backend modules may only use `import type` when importing from server/shared/types.ts or server/shared/interfaces.ts."
-              },
-              {
-                "to": { "type": "backend-module" },
-                "disallow": { "to": { "internalPath": "**" } },
-                "message": "Cross-module imports must go through that module's barrel file (server/modules/<module>/index.ts or index.js)."
-              },
-              {
-                "to": { "type": "backend-module" },
-                "allow": { "to": { "internalPath": ["index", "index.{js,mjs,cjs,ts,tsx}"] } }
               }
             ]
           }

@@ -6,6 +6,8 @@ import type { Terminal } from '@xterm/xterm';
 import type { Project, ProjectSession } from '@/shared/types';
 import { useShellConnection } from '@/modules/shell/hooks/useShellConnection';
 import { useShellTerminal } from '@/modules/shell/hooks/useShellTerminal';
+import { isShellSocketActive } from '@/modules/shell/utils/socket';
+import type { ShellSocket } from '@/modules/shell/utils/socket';
 
 type UseShellRuntimeOptions = {
   selectedProject: Project | null | undefined;
@@ -23,7 +25,7 @@ type UseShellRuntimeOptions = {
 type UseShellRuntimeResult = {
   terminalContainerRef: RefObject<HTMLDivElement>;
   terminalRef: MutableRefObject<Terminal | null>;
-  wsRef: MutableRefObject<WebSocket | null>;
+  wsRef: MutableRefObject<ShellSocket | null>;
   isConnected: boolean;
   isInitialized: boolean;
   isConnecting: boolean;
@@ -46,7 +48,7 @@ export function useShellRuntime({
   const terminalContainerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<Terminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
-  const wsRef = useRef<WebSocket | null>(null);
+  const wsRef = useRef<ShellSocket | null>(null);
 
   const selectedProjectRef = useRef(selectedProject);
   const selectedSessionRef = useRef(selectedSession);
@@ -72,10 +74,7 @@ export function useShellRuntime({
       return;
     }
 
-    if (
-      activeSocket.readyState === WebSocket.OPEN ||
-      activeSocket.readyState === WebSocket.CONNECTING
-    ) {
+    if (isShellSocketActive(activeSocket)) {
       activeSocket.close();
     }
 

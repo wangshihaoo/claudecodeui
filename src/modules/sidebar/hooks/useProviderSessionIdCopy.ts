@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Check, Copy } from 'lucide-react';
 
 import { api } from '@/shared/api';
@@ -19,6 +20,7 @@ type CopyState = 'loading' | 'idle' | 'copying' | 'copied' | 'error';
  * effects, which would otherwise be torn down and rebuilt on every keystroke.
  */
 export function useProviderSessionIdCopy(sessionId: string, providerLabel: string) {
+  const { t } = useTranslation('sidebar');
   const [copyState, setCopyState] = useState<CopyState>('idle');
   const [providerSessionId, setProviderSessionId] = useState<string | null>(null);
   const requestRef = useRef(0);
@@ -81,14 +83,14 @@ export function useProviderSessionIdCopy(sessionId: string, providerLabel: strin
   }, [copy, copyState, load, providerSessionId]);
 
   const copyLabel = copyState === 'loading'
-    ? `Loading ${providerLabel} session ID…`
+    ? t('copySessionId.loading', { provider: providerLabel })
     : copyState === 'copied'
-      ? `${providerLabel} session ID copied`
+      ? t('copySessionId.copied', { provider: providerLabel })
       : copyState === 'error'
         ? providerSessionId
-          ? `Couldn't copy ${providerLabel} session ID`
-          : `${providerLabel} session ID unavailable`
-        : `Copy ${providerLabel} session ID`;
+          ? t('copySessionId.copyFailed', { provider: providerLabel })
+          : t('copySessionId.unavailable', { provider: providerLabel })
+        : t('copySessionId.copy', { provider: providerLabel });
 
   return {
     copyState,

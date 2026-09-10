@@ -24,7 +24,8 @@
     "git": "Source Control",
     "tasks": "Tasks",
     "browser": "Browser",
-    "computer": "Computer"
+    "computer": "Computer",
+    "views": "Workspace views"
   },
   "status": {
     "loading": "Loading...",
@@ -53,7 +54,9 @@
     "back": "Back",
     "next": "Next",
     "previous": "Previous",
-    "logout": "Logout"
+    "logout": "Logout",
+    "scrollTabsLeft": "Scroll tabs left",
+    "scrollTabsRight": "Scroll tabs right"
   },
   "common": {
     "language": "Language",
@@ -68,7 +71,10 @@
     "version": "Version",
     "select": "Select",
     "selectAll": "Select All",
-    "deselectAll": "Deselect All"
+    "deselectAll": "Deselect All",
+    "done": "Done",
+    "failed": "Failed",
+    "cancel": "Cancel"
   },
   "time": {
     "justNow": "Just now",
@@ -133,6 +139,40 @@
       "refresh": "Refresh",
       "menuLabel": "File context menu",
       "loading": "Loading..."
+    },
+    "uploadingFiles": "Uploading files",
+    "uploadComplete": "Upload complete",
+    "uploadFailed": "Upload failed",
+    "uploadedCount": "Uploaded {{uploaded}} of {{total}} {{label}}",
+    "uploadToFolder": "Upload files to \"{{folder}}\"",
+    "uploadFiles": "Upload files (max {{size}} each)",
+    "dropToUploadTo": "Drop files to upload to \"{{folder}}\"",
+    "dropToUpload": "Drop files to upload",
+    "imageLoading": "Loading image...",
+    "imageLoadFailed": "Unable to load image",
+    "delete": {
+      "title": "Delete {{type}}",
+      "folder": "Folder",
+      "file": "File",
+      "folderWarning": "This folder and all its contents will be permanently deleted.",
+      "fileWarning": "This file will be permanently deleted.",
+      "confirm": "Delete"
+    },
+    "validation": {
+      "emptyName": "Filename cannot be empty",
+      "invalidChars": "Filename contains invalid characters",
+      "reserved": "Filename is a reserved name",
+      "dotsOnly": "Filename cannot be only dots"
+    },
+    "toast": {
+      "renamed": "Renamed successfully",
+      "folderDeleted": "Folder deleted",
+      "fileDeleted": "File deleted",
+      "fileCreated": "File created successfully",
+      "folderCreated": "Folder created successfully",
+      "copyFailed": "Failed to copy path",
+      "pathCopied": "Path copied to clipboard",
+      "folderDownloaded": "Folder downloaded as ZIP"
     }
   },
   "projectWizard": {

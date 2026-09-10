@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import type { MutableRefObject } from 'react';
 
 import { api } from '@/shared/api';
-import type { MarkSessionIdle, SessionActivityMap,Project,ProjectSession,LLMProvider,NormalizedMessage,ChatMessage,DiffCalculator } from '@/shared/types';
+import type { MarkSessionIdle, SessionActivityMap, Project, ProjectSession, LLMProvider, NormalizedMessage, ChatMessage, DiffCalculator, RealtimeConnection } from '@/shared/types';
 import type { SessionStore } from '@/modules/chat/hooks/useSessionStore';
 import { SESSION_MESSAGES_PAGE_SIZE } from '@/modules/chat/utils/sessionMessagePagination';
 import { createMessageHistoryRefreshCoordinator } from '@/modules/chat/utils/messageHistoryRefreshCoordinator';
@@ -82,13 +82,13 @@ type UseChatSessionStateArgs = {
   isActive: boolean;
   selectedProject: Project | null;
   selectedSession: ProjectSession | null;
-  ws: WebSocket | null;
+  ws: RealtimeConnection | null;
   sendMessage: (message: unknown) => void;
   externalMessageUpdate?: number;
   newSessionTrigger?: number;
   processingSessions?: SessionActivityMap;
   onSessionIdle?: MarkSessionIdle;
-  resetStreamingState: () => void;
+  resetStreamingState: (sessionId?: string | null, clearAll?: boolean) => void;
   /** When each session's `chat.subscribe` was last sent; guards stale idle acks. */
   statusCheckSentAtRef: MutableRefObject<Map<string, number>>;
   /** Highest live seq observed per session; sent as `lastSeq` on subscribe. */
@@ -269,8 +269,10 @@ export function useChatSessionState({
      * - A deterministic clean draft state on every New Session click.
      * - No dependence on route/tab/session-object identity changes.
      * - No coupling to unrelated external update signals.
+     *
+     * Stream buffers stay intact: another session may still be flushing in the
+     * background. `clearAll()` is reserved for ChatInterface unmount.
      */
-    resetStreamingState();
     setCurrentSessionId(null);
     setPendingUserMessage(null);
     messagesOffsetRef.current = 0;
@@ -300,7 +302,7 @@ export function useChatSessionState({
       clearTimeout(loadAllFinishedTimerRef.current);
       loadAllFinishedTimerRef.current = null;
     }
-  }, [newSessionTrigger, onSessionIdle, resetStreamingState]);
+  }, [newSessionTrigger, onSessionIdle]);
 
   /* ---------------------------------------------------------------- */
   /*  Derive processing state for the viewed session                  */
@@ -692,7 +694,7 @@ export function useChatSessionState({
         return;
       }
 
-      resetStreamingState();
+      resetStreamingState(currentSessionId);
       setCurrentSessionId(null);
       messagesOffsetRef.current = 0;
       setHasMoreMessages(false);
@@ -725,11 +727,10 @@ export function useChatSessionState({
     }
 
     const sessionChanged = currentSessionId !== null && currentSessionId !== selectedSessionId;
-    if (sessionChanged) {
-      resetStreamingState();
-    }
 
-    // Reset pagination/scroll state
+    // Reset pagination/scroll state. Do not clear the newly selected session's
+    // stream buffer: it may still hold a background stream that must survive
+    // the switch. `clearAll()` is reserved for ChatInterface unmount.
     messagesOffsetRef.current = 0;
     setHasMoreMessages(false);
     setTotalMessages(0);

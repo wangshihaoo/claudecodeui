@@ -4,6 +4,7 @@ import { renderHook } from '@testing-library/react';
 import { test } from 'vitest';
 
 import { useChatRealtimeHandlers } from '@/modules/chat/hooks/useChatRealtimeHandlers';
+import { createSessionStreamBuffer } from '@/modules/chat/utils/sessionStreamBuffer';
 import type { ServerEvent, ProjectSession, PendingPermissionRequest } from '@/shared/types';
 import type { SessionStore } from '@/modules/chat/hooks/useSessionStore';
 
@@ -33,8 +34,7 @@ const renderHandlers = () => {
     setPendingPermissionRequests: (next) => {
       pending = typeof next === 'function' ? next(pending) : next;
     },
-    streamTimerRef: { current: null },
-    accumulatedStreamRef: { current: '' },
+    streamBufferRef: { current: createSessionStreamBuffer() },
     lastSeqRef: { current: new Map() },
     statusCheckSentAtRef: { current: new Map() },
     requestLatestMessages: async () => {},

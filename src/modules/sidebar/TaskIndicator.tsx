@@ -1,5 +1,6 @@
-import { AlertCircle, CheckCircle, Settings, X } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import type { TFunction } from 'i18next';
+import { AlertCircle, CheckCircle, Settings, X, type LucideIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/shared/utils';
 
@@ -41,15 +42,15 @@ const paddingClassNames: Record<TaskIndicatorSize, string> = {
   lg: 'p-2',
 };
 
-const getIndicatorConfig = (status: TaskIndicatorStatus): IndicatorConfig => {
+const getIndicatorConfig = (status: TaskIndicatorStatus, t: TFunction): IndicatorConfig => {
   // Keep color and label mapping centralized so status display remains consistent in sidebar UIs.
   if (status === 'fully-configured') {
     return {
       icon: CheckCircle,
       colorClassName: 'text-green-500 dark:text-green-400',
       backgroundClassName: 'bg-green-50 dark:bg-green-950',
-      label: 'TaskMaster Ready',
-      title: 'TaskMaster fully configured with MCP server',
+      label: t('taskMaster.ready'),
+      title: t('taskMaster.readyTitle'),
     };
   }
 
@@ -58,8 +59,8 @@ const getIndicatorConfig = (status: TaskIndicatorStatus): IndicatorConfig => {
       icon: Settings,
       colorClassName: 'text-blue-500 dark:text-blue-400',
       backgroundClassName: 'bg-blue-50 dark:bg-blue-950',
-      label: 'TaskMaster Init',
-      title: 'TaskMaster initialized, MCP server needs setup',
+      label: t('taskMaster.init'),
+      title: t('taskMaster.initTitle'),
     };
   }
 
@@ -68,8 +69,8 @@ const getIndicatorConfig = (status: TaskIndicatorStatus): IndicatorConfig => {
       icon: AlertCircle,
       colorClassName: 'text-amber-500 dark:text-amber-400',
       backgroundClassName: 'bg-amber-50 dark:bg-amber-950',
-      label: 'MCP Ready',
-      title: 'MCP server configured, TaskMaster needs initialization',
+      label: t('taskMaster.mcpReady'),
+      title: t('taskMaster.mcpTitle'),
     };
   }
 
@@ -77,8 +78,8 @@ const getIndicatorConfig = (status: TaskIndicatorStatus): IndicatorConfig => {
     icon: X,
     colorClassName: 'text-gray-400 dark:text-gray-500',
     backgroundClassName: 'bg-gray-50 dark:bg-gray-900',
-    label: 'No TaskMaster',
-    title: 'TaskMaster not configured',
+    label: t('taskMaster.none'),
+    title: t('taskMaster.noneTitle'),
   };
 };
 
@@ -89,7 +90,8 @@ export default function TaskIndicator({
   className = '',
   showLabel = false,
 }: TaskIndicatorProps) {
-  const indicatorConfig = getIndicatorConfig(status);
+  const { t } = useTranslation('sidebar');
+  const indicatorConfig = getIndicatorConfig(status, t);
   const Icon = indicatorConfig.icon;
 
   if (showLabel) {

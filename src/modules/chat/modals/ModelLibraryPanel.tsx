@@ -47,7 +47,7 @@ export default function ModelLibraryPanel({
   actions,
   onDone,
 }: ModelLibraryPanelProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('chat');
   const [selectedProvider, setSelectedProvider] = useState(initialProvider);
   const [editing, setEditing] = useState<ProviderModelOption | null>(null);
   const [model, setModel] = useState('');
@@ -107,7 +107,7 @@ export default function ModelLibraryPanel({
       return;
     }
     if (/\s/.test(normalizedId)) {
-      setError('Model IDs cannot contain spaces.');
+      setError(t('modelLibrary.idNoSpaces'));
       return;
     }
 
@@ -120,13 +120,13 @@ export default function ModelLibraryPanel({
           model: normalizedModel,
           id: normalizedId,
         });
-        setNotice(`${normalizedModel} was updated.`);
+        setNotice(t('modelLibrary.updated', { name: normalizedModel }));
       } else {
         await actions.create(selectedProvider, {
           model: normalizedModel,
           id: normalizedId,
         });
-        setNotice(`${normalizedModel} was added.`);
+        setNotice(t('modelLibrary.added', { name: normalizedModel }));
       }
       resetForm();
     } catch (caughtError) {
@@ -150,7 +150,7 @@ export default function ModelLibraryPanel({
         resetForm();
       }
       setConfirmDeleteRecordId(null);
-      setNotice(`${option.label} was deleted.`);
+      setNotice(t('modelLibrary.deleted', { name: option.label }));
     } catch (caughtError) {
       setError(caughtError instanceof Error ? caughtError.message : t('chat:misc.modelDeleteFailed'));
     } finally {
@@ -167,9 +167,9 @@ export default function ModelLibraryPanel({
               <Plus className="h-4 w-4" />
             </span>
             <div>
-              <p className="text-base font-semibold tracking-tight text-foreground">Model library</p>
+              <p className="text-base font-semibold tracking-tight text-foreground">{t('modelLibrary.title')}</p>
               <p className="text-xs leading-5 text-muted-foreground">
-                Add model IDs supported by your provider. Built-in models stay locked.
+                {t('modelLibrary.description')}
               </p>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function ModelLibraryPanel({
         {onDone && (
           <Button type="button" variant="outline" size="sm" onClick={onDone} className="shrink-0 rounded-xl">
             <ArrowLeft className="h-3.5 w-3.5" />
-            Back to models
+            {t('modelLibrary.back')}
           </Button>
         )}
       </div>
@@ -212,10 +212,12 @@ export default function ModelLibraryPanel({
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="text-sm font-semibold text-foreground">
-                {editing ? 'Edit custom model' : 'Add a custom model'}
+                {editing ? t('modelLibrary.editTitle') : t('modelLibrary.addTitle')}
               </p>
               <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                The ID is sent to {PROVIDERS.find((entry) => entry.id === selectedProvider)?.label} exactly as written.
+                {t('modelLibrary.idHint', {
+                  provider: PROVIDERS.find((entry) => entry.id === selectedProvider)?.label,
+                })}
               </p>
             </div>
             {editing && (
@@ -233,33 +235,33 @@ export default function ModelLibraryPanel({
           </div>
 
           <label className="mt-4 block text-xs font-semibold text-foreground" htmlFor="custom-model-name">
-            Model name
+            {t('modelLibrary.nameLabel')}
           </label>
           <Input
             id="custom-model-name"
             value={model}
             onChange={(event) => setModel(event.target.value)}
             maxLength={80}
-            placeholder="e.g. GPT-5.5 Pro"
+            placeholder={t('modelLibrary.namePlaceholder')}
             autoComplete="off"
             className="mt-1.5 h-10 rounded-xl bg-background"
           />
 
           <label className="mt-4 block text-xs font-semibold text-foreground" htmlFor="custom-model-id">
-            Model ID
+            {t('modelLibrary.idLabel')}
           </label>
           <Input
             id="custom-model-id"
             value={modelId}
             onChange={(event) => setModelId(event.target.value)}
             maxLength={200}
-            placeholder="e.g. gpt-5.5-pro"
+            placeholder={t('modelLibrary.idPlaceholder')}
             autoComplete="off"
             spellCheck={false}
             className="mt-1.5 h-10 rounded-xl bg-background font-mono"
           />
           <p className="mt-1.5 text-[11px] leading-4 text-muted-foreground">
-            Use the exact identifier accepted by the provider CLI. IDs cannot contain spaces.
+            {t('modelLibrary.idHelp')}
           </p>
 
           {error && (
@@ -276,7 +278,7 @@ export default function ModelLibraryPanel({
 
           <Button type="submit" disabled={saving} className="mt-4 w-full rounded-xl">
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : editing ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-            {saving ? 'Saving…' : editing ? 'Save changes' : 'Add model'}
+            {saving ? t('modelLibrary.saving') : editing ? t('modelLibrary.saveChanges') : t('modelLibrary.addModel')}
           </Button>
         </form>
 
@@ -284,16 +286,16 @@ export default function ModelLibraryPanel({
           <section>
             <div className="mb-2 flex items-center justify-between gap-3 px-1">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-foreground">Your models</p>
-                <p className="mt-0.5 text-[11px] text-muted-foreground">Editable and stored in auth.db</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-foreground">{t('modelLibrary.yourModels')}</p>
+                <p className="mt-0.5 text-[11px] text-muted-foreground">{t('modelLibrary.yourModelsHint')}</p>
               </div>
               <Badge variant="secondary" className="rounded-full text-[10px]">{customModels.length}</Badge>
             </div>
 
             {customModels.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border bg-background/60 px-4 py-7 text-center">
-                <p className="text-sm font-medium text-foreground">No custom models yet</p>
-                <p className="mt-1 text-xs text-muted-foreground">Add one with the form and it will appear in every model picker.</p>
+                <p className="text-sm font-medium text-foreground">{t('modelLibrary.emptyTitle')}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{t('modelLibrary.emptyHint')}</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -306,7 +308,7 @@ export default function ModelLibraryPanel({
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <p className="truncate text-sm font-semibold text-foreground">{option.label}</p>
-                            <Badge className="rounded-full px-2 py-0 text-[9px]">Custom</Badge>
+                            <Badge className="rounded-full px-2 py-0 text-[9px]">{t('modelLibrary.customBadge')}</Badge>
                           </div>
                           <p className="mt-1 break-all font-mono text-[11px] text-muted-foreground">{option.value}</p>
                         </div>
@@ -318,7 +320,7 @@ export default function ModelLibraryPanel({
                               size="icon"
                               onClick={() => startEditing(option)}
                               className="h-8 w-8 rounded-lg"
-                              aria-label={`Edit ${option.label}`}
+                              aria-label={t('modelLibrary.editAria', { name: option.label })}
                             >
                               <Pencil className="h-3.5 w-3.5" />
                             </Button>
@@ -328,7 +330,7 @@ export default function ModelLibraryPanel({
                               size="icon"
                               onClick={() => setConfirmDeleteRecordId(option.recordId ?? null)}
                               className="h-8 w-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                              aria-label={`Delete ${option.label}`}
+                              aria-label={t('modelLibrary.deleteAria', { name: option.label })}
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </Button>
@@ -337,14 +339,14 @@ export default function ModelLibraryPanel({
                       </div>
                       {confirming && (
                         <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-3">
-                          <p className="text-xs text-muted-foreground">Delete this model from all pickers?</p>
+                          <p className="text-xs text-muted-foreground">{t('modelLibrary.confirmDelete')}</p>
                           <div className="flex items-center gap-2">
                             <Button type="button" variant="ghost" size="sm" onClick={() => setConfirmDeleteRecordId(null)} className="h-8 rounded-lg">
-                              Cancel
+                              {t('common:buttons.cancel')}
                             </Button>
                             <Button type="button" variant="destructive" size="sm" disabled={deleting} onClick={() => void handleDelete(option)} className="h-8 rounded-lg">
                               {deleting && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                              Delete
+                              {t('common:buttons.delete')}
                             </Button>
                           </div>
                         </div>
@@ -359,8 +361,8 @@ export default function ModelLibraryPanel({
           <section>
             <div className="mb-2 flex items-center justify-between gap-3 px-1">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-foreground">Built-in models</p>
-                <p className="mt-0.5 text-[11px] text-muted-foreground">Maintained by CloudCLI and read-only</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-foreground">{t('modelLibrary.builtinTitle')}</p>
+                <p className="mt-0.5 text-[11px] text-muted-foreground">{t('modelLibrary.builtinHint')}</p>
               </div>
               <Badge variant="secondary" className="rounded-full text-[10px]">{predefinedModels.length}</Badge>
             </div>

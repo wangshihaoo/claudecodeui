@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import type { Terminal } from '@xterm/xterm';
 
 import { sendSocketMessage } from '@/modules/shell/utils/socket';
+import type { ShellSocket } from '@/modules/shell/utils/socket';
 
 type Shortcut =
   | { type: 'key'; id: string; label: string; sequence: string }
@@ -38,7 +39,7 @@ const ARROW_ICONS = {
 } as const;
 
 type TerminalShortcutsPanelProps = {
-  wsRef: MutableRefObject<WebSocket | null>;
+  wsRef: MutableRefObject<ShellSocket | null>;
   terminalRef: MutableRefObject<Terminal | null>;
   isConnected: boolean;
   bottomOffset?: string;

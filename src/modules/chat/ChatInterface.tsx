@@ -10,6 +10,7 @@ import type {
   ChatMessage,
   Project,
   ProjectSession,
+  RealtimeConnection,
   SessionEstablishedContext,
   SessionNavigationOptions,
 } from '@/shared/types';
@@ -19,6 +20,7 @@ import { useChatSessionState } from '@/modules/chat/hooks/useChatSessionState';
 import { useChatRealtimeHandlers } from '@/modules/chat/hooks/useChatRealtimeHandlers';
 import { useChatComposerState } from '@/modules/chat/hooks/useChatComposerState';
 import { useSessionStore } from '@/modules/chat/hooks/useSessionStore';
+import { createSessionStreamBuffer } from '@/modules/chat/utils/sessionStreamBuffer';
 import {
   useProcessingSessions,
   useSessionProtectionActions,
@@ -31,7 +33,7 @@ type ChatInterfaceProps = {
   isActive: boolean;
   selectedProject: Project | null;
   selectedSession: ProjectSession | null;
-  ws: WebSocket | null;
+  ws: RealtimeConnection | null;
   sendMessage: (message: unknown) => void;
   onFileOpen?: (filePath: string, diffInfo?: any) => void;
   onNavigateToSession?: (targetSessionId: string, options?: SessionNavigationOptions) => void;
@@ -78,8 +80,7 @@ function ChatInterface({
   } = useSessionProtectionActions();
 
   const sessionStore = useSessionStore();
-  const streamTimerRef = useRef<number | null>(null);
-  const accumulatedStreamRef = useRef('');
+  const streamBufferRef = useRef(createSessionStreamBuffer());
   // When each session's `chat.subscribe` was last sent; idle acks older than
   // a later local request are discarded as stale.
   const statusCheckSentAtRef = useRef(new Map<string, number>());
@@ -88,12 +89,26 @@ function ChatInterface({
   // server replays only the events this client actually missed.
   const lastSeqRef = useRef(new Map<string, number>());
 
-  const resetStreamingState = useCallback(() => {
-    if (streamTimerRef.current) {
-      clearTimeout(streamTimerRef.current);
-      streamTimerRef.current = null;
+  // `clearAll` is only for this component's unmount. Session switches and New
+  // Session must leave other sessions' buffers and flush timers running.
+  const resetStreamingState = useCallback((sessionId?: string | null, clearAll = false) => {
+    if (clearAll) {
+      for (const { timerId } of streamBufferRef.current.clearAll()) {
+        if (timerId !== null) {
+          clearTimeout(timerId);
+        }
+      }
+      return;
     }
-    accumulatedStreamRef.current = '';
+
+    if (!sessionId) {
+      return;
+    }
+
+    const snapshot = streamBufferRef.current.clearSession(sessionId);
+    if (snapshot?.timerId !== null && snapshot?.timerId !== undefined) {
+      clearTimeout(snapshot.timerId);
+    }
   }, []);
 
   const {
@@ -282,8 +297,7 @@ function ChatInterface({
     setTokenBudget,
     pendingPermissionRequests,
     setPendingPermissionRequests,
-    streamTimerRef,
-    accumulatedStreamRef,
+    streamBufferRef,
     lastSeqRef,
     statusCheckSentAtRef,
     onSessionProcessing,
@@ -315,7 +329,8 @@ function ChatInterface({
 
   useEffect(() => {
     return () => {
-      resetStreamingState();
+      // Unmount is the only caller allowed to drop every session buffer/timer.
+      resetStreamingState(undefined, true);
     };
   }, [resetStreamingState]);
 

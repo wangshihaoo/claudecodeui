@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { api } from '@/shared/api';
+import { api, authenticatedFetch } from '@/shared/api';
 import type { LLMProvider } from '@/shared/types';
 
 export type SessionMessageMatch = {
@@ -31,71 +31,45 @@ export function useSessionMessageSearch(
 ) {
   const [items, setItems] = useState<SessionMessageMatch[]>([]);
   const seqRef = useRef(0);
-  const esRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
     const trimmed = query.trim();
     if (!enabled || !projectId || trimmed.length < MIN_QUERY) {
       setItems([]);
-      esRef.current?.close();
-      esRef.current = null;
+      seqRef.current++;
       return;
     }
 
-    esRef.current?.close();
-    esRef.current = null;
     seqRef.current++;
 
     const handle = setTimeout(() => {
       const seq = ++seqRef.current;
       const url = api.searchConversationsUrl(trimmed);
-      const es = new EventSource(url);
-      esRef.current = es;
-      const accumulated: SessionMessageMatch[] = [];
+      void authenticatedFetch(url)
+        .then(async (response) => {
+          if (!response.ok) throw new Error(`Search failed with status ${response.status}`);
+          const data = await response.json() as { results?: ProjectResult[] };
+          if (seq !== seqRef.current) return;
 
-      es.addEventListener('result', (evt) => {
-        if (seq !== seqRef.current) {
-          es.close();
-          return;
-        }
-        try {
-          const data = JSON.parse((evt as MessageEvent).data) as { projectResult: ProjectResult };
-          const pr = data.projectResult;
-          if (pr.projectId !== projectId) return;
-          for (const s of pr.sessions) {
-            accumulated.push({
-              sessionId: s.sessionId,
-              label: s.sessionSummary || s.sessionId,
-              snippet: s.matches[0]?.snippet ?? '',
-              provider: s.provider,
-            });
-          }
-          setItems([...accumulated]);
-        } catch {
-          // ignore malformed
-        }
-      });
-
-      const finish = () => {
-        if (seq !== seqRef.current) return;
-        es.close();
-        esRef.current = null;
-      };
-      es.addEventListener('done', finish);
-      es.addEventListener('error', finish);
+          const projectResult = data.results?.find((result) => result.projectId === projectId);
+          const nextItems = projectResult?.sessions.map((session) => ({
+            sessionId: session.sessionId,
+            label: session.sessionSummary || session.sessionId,
+            snippet: session.matches[0]?.snippet ?? '',
+            provider: session.provider,
+          })) ?? [];
+          setItems(nextItems);
+        })
+        .catch(() => {
+          if (seq === seqRef.current) setItems([]);
+        });
     }, DEBOUNCE_MS);
 
     return () => {
       clearTimeout(handle);
+      seqRef.current++;
     };
   }, [projectId, query, enabled]);
-
-  useEffect(() => {
-    return () => {
-      esRef.current?.close();
-      esRef.current = null;
-    };
-  }, []);
 
   return items;
 }

@@ -133,7 +133,7 @@ function ChatMessageImage({ image, projectId }: { image: ChatImage; projectId?: 
   const { t } = useTranslation();
   const { src, failed } = useChatImageSrc(image, projectId);
   const [expanded, setExpanded] = useState(false);
-  const alt = image.name || 'Attached image';
+  const alt = image.name || t('chat:attachments.unnamedImage');
 
   if (failed) {
     return (

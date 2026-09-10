@@ -5,7 +5,8 @@ import type { Terminal } from '@xterm/xterm';
 
 import type { Project, ProjectSession } from '@/shared/types';
 import { TERMINAL_INIT_DELAY_MS } from '@/shared/constants';
-import { getShellWebSocketUrl, parseShellMessage, sendSocketMessage } from '@/modules/shell/utils/socket';
+import { createLocalShellSocket, parseShellMessage, sendSocketMessage } from '@/modules/shell/utils/socket';
+import type { ShellSocket } from '@/modules/shell/utils/socket';
 import { readSelectedProvider } from '@/shared/selectedProvider';
 
 const ANSI_ESCAPE_REGEX =
@@ -13,7 +14,7 @@ const ANSI_ESCAPE_REGEX =
 const PROCESS_EXIT_REGEX = /Process exited with code (\d+)/;
 
 type UseShellConnectionOptions = {
-  wsRef: MutableRefObject<WebSocket | null>;
+  wsRef: MutableRefObject<ShellSocket | null>;
   terminalRef: MutableRefObject<Terminal | null>;
   fitAddonRef: MutableRefObject<FitAddon | null>;
   selectedProjectRef: MutableRefObject<Project | null | undefined>;
@@ -124,16 +125,9 @@ export function useShellConnection({
       }
 
       try {
-        const wsUrl = getShellWebSocketUrl();
-        if (!wsUrl) {
-          connectingRef.current = false;
-          setIsConnecting(false);
-          return;
-        }
-
         connectingRef.current = true;
 
-        const socket = new WebSocket(wsUrl);
+        const socket = createLocalShellSocket();
         wsRef.current = socket;
 
         socket.onopen = () => {
