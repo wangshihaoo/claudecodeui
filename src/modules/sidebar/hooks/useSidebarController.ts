@@ -134,25 +134,6 @@ export function useSidebarController({
   }, [projects]);
 
   useEffect(() => {
-    // Auto-expand only when the selected project identity changes.
-    // Depending on the full `selectedProject` object (or `selectedSession`) causes
-    // websocket-driven list refreshes to re-open projects users manually collapsed.
-    const selectedProjectId = selectedProject?.projectId;
-    if (!selectedProjectId) {
-      return;
-    }
-
-    setExpandedProjects((prev) => {
-      if (prev.has(selectedProjectId)) {
-        return prev;
-      }
-      const next = new Set(prev);
-      next.add(selectedProjectId);
-      return next;
-    });
-  }, [selectedProject?.projectId]);
-
-  useEffect(() => {
     if (projects.length > 0 && !isLoading) {
       const loadedProjects = new Set<string>();
       projects.forEach((project) => {

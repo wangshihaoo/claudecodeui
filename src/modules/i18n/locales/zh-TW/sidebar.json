@@ -20,7 +20,7 @@
     "runClaudeCli": "在專案目錄中執行 Claude CLI 以開始使用"
   },
   "app": {
-    "title": "CloudCLI",
+    "title": "Cortex",
     "subtitle": "AI 程式開發助手"
   },
   "sessions": {
@@ -120,7 +120,7 @@
     "restartRequired": "已安裝更新 — 請重新啟動伺服器以套用"
   },
   "search": {
-    "modeProjects": "專案",
+    "modeProjects": "會議",
     "modeConversations": "對話",
     "conversationsPlaceholder": "搜尋對話內容...",
     "searching": "搜尋中...",

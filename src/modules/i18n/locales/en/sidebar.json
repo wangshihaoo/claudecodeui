@@ -20,7 +20,7 @@
     "runClaudeCli": "Run Claude CLI in a project directory to get started"
   },
   "app": {
-    "title": "CloudCLI",
+    "title": "Cortex",
     "subtitle": "AI coding assistant interface"
   },
   "sessions": {
@@ -132,7 +132,7 @@
     "restartRequired": "Update installed — restart the server to apply"
   },
   "search": {
-    "modeProjects": "Projects",
+    "modeProjects": "Meetings",
     "modeConversations": "Conversations",
     "conversationsPlaceholder": "Search in conversations...",
     "searching": "Searching...",

@@ -1,13 +1,5 @@
 import {
-  Bell,
-  Bot,
-  GitBranch,
-  Info,
-  KeyRound,
-  ListChecks,
-  MonitorPlay,
   Palette,
-  Plug,
 } from 'lucide-react';
 import type { ComponentType } from 'react';
 
@@ -56,15 +48,7 @@ type SettingsMainTabMeta = {
  * namespace via `labelKey`.
  */
 export const SETTINGS_MAIN_TABS: SettingsMainTabMeta[] = [
-  { id: 'agents', labelKey: 'mainTabs.agents', keywords: 'agents subagents claude code', icon: Bot },
   { id: 'appearance', labelKey: 'mainTabs.appearance', keywords: 'appearance theme dark light language', icon: Palette },
-  { id: 'git', labelKey: 'mainTabs.git', keywords: 'git github commits', icon: GitBranch },
-  { id: 'api', labelKey: 'mainTabs.apiTokens', keywords: 'api tokens auth keys', icon: KeyRound },
-  { id: 'tasks', labelKey: 'mainTabs.tasks', keywords: 'tasks taskmaster', icon: ListChecks },
-  { id: 'browser', labelKey: 'mainTabs.browser', keywords: 'browser playwright chromium automation', icon: MonitorPlay },
-  { id: 'notifications', labelKey: 'mainTabs.notifications', keywords: 'notifications alerts push', icon: Bell },
-  { id: 'plugins', labelKey: 'mainTabs.plugins', keywords: 'plugins extensions integrations', icon: Plug },
-  { id: 'about', labelKey: 'mainTabs.about', keywords: 'about version info', icon: Info },
 ];
 
 // ---------------------------

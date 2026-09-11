@@ -54,15 +54,10 @@ type NotificationPreferencesResponse = {
 
 type ActiveLoginProvider = AgentProvider | '';
 
-const KNOWN_MAIN_TABS: SettingsMainTab[] = ['agents', 'appearance', 'git', 'api', 'tasks', 'browser', 'notifications', 'plugins', 'about'];
+const KNOWN_MAIN_TABS: SettingsMainTab[] = ['appearance'];
 
 const normalizeMainTab = (tab: string): SettingsMainTab => {
-  // Keep backwards compatibility with older callers that still pass "tools".
-  if (tab === 'tools') {
-    return 'agents';
-  }
-
-  return KNOWN_MAIN_TABS.includes(tab as SettingsMainTab) ? (tab as SettingsMainTab) : 'agents';
+  return KNOWN_MAIN_TABS.includes(tab as SettingsMainTab) ? (tab as SettingsMainTab) : 'appearance';
 };
 
 const toCodexPermissionMode = (value: unknown): CodexPermissionMode => {

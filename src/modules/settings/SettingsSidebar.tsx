@@ -1,4 +1,4 @@
-import { Bell, Bot, GitBranch, Info, Key, ListChecks, Mic, MonitorPlay, Palette, Puzzle } from 'lucide-react';
+import { Palette } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/shared/utils';
@@ -13,20 +13,11 @@ type SettingsSidebarProps = {
 type NavItem = {
   id: SettingsMainTab;
   labelKey: string;
-  icon: typeof Bot;
+  icon: typeof Palette;
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'agents', labelKey: 'mainTabs.agents', icon: Bot },
   { id: 'appearance', labelKey: 'mainTabs.appearance', icon: Palette },
-  { id: 'git', labelKey: 'mainTabs.git', icon: GitBranch },
-  { id: 'api', labelKey: 'mainTabs.apiTokens', icon: Key },
-  { id: 'voice', labelKey: 'mainTabs.voice', icon: Mic },
-  { id: 'tasks', labelKey: 'mainTabs.tasks', icon: ListChecks },
-  { id: 'browser', labelKey: 'mainTabs.browser', icon: MonitorPlay },
-  { id: 'plugins', labelKey: 'mainTabs.plugins', icon: Puzzle },
-  { id: 'notifications', labelKey: 'mainTabs.notifications', icon: Bell },
-  { id: 'about', labelKey: 'mainTabs.about', icon: Info },
 ];
 
 /** Rendered by Settings to switch between the settings dialog's main sections. */

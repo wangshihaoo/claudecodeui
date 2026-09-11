@@ -122,7 +122,6 @@ type SidebarContentProps = {
   restartRequired: boolean;
   releaseInfo: ReleaseInfo | null;
   latestVersion: string | null;
-  currentVersion: string;
   onShowVersionModal: () => void;
   onShowSettings: () => void;
   projectListProps: SidebarProjectListProps;
@@ -169,7 +168,6 @@ export default function SidebarContent({
   restartRequired,
   releaseInfo,
   latestVersion,
-  currentVersion,
   onShowVersionModal,
   onShowSettings,
   projectListProps,
@@ -691,7 +689,6 @@ export default function SidebarContent({
           restartRequired={restartRequired}
           releaseInfo={releaseInfo}
           latestVersion={latestVersion}
-          currentVersion={currentVersion}
           onShowVersionModal={onShowVersionModal}
           onShowSettings={onShowSettings}
           t={t}

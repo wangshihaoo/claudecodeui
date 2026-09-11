@@ -20,7 +20,7 @@
     "runClaudeCli": "Führ Claude CLI in einem Projektverzeichnis aus, um zu beginnen"
   },
   "app": {
-    "title": "CloudCLI",
+    "title": "Cortex",
     "subtitle": "KI-Programmierassistent-Oberfläche"
   },
   "sessions": {
@@ -121,7 +121,7 @@
     "restartRequired": "Update installiert – zum Anwenden Server neu starten"
   },
   "search": {
-    "modeProjects": "Projekte",
+    "modeProjects": "Meetings",
     "modeConversations": "Unterhaltungen",
     "conversationsPlaceholder": "In Unterhaltungen suchen...",
     "searching": "Sucht...",

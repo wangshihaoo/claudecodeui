@@ -20,7 +20,7 @@
     "runClaudeCli": "Başlamak için bir proje dizininde Claude CLI çalıştır"
   },
   "app": {
-    "title": "CloudCLI",
+    "title": "Cortex",
     "subtitle": "AI kodlama asistanı arayüzü"
   },
   "sessions": {
@@ -121,7 +121,7 @@
     "restartRequired": "Güncelleme yüklendi — uygulamak için sunucuyu yeniden başlatın"
   },
   "search": {
-    "modeProjects": "Projeler",
+    "modeProjects": "Toplantılar",
     "modeConversations": "Konuşmalar",
     "conversationsPlaceholder": "Konuşmalarda ara...",
     "searching": "Aranıyor...",

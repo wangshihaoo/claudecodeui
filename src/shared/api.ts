@@ -112,7 +112,6 @@ type LocalEventListener = (event: ServerEvent) => void;
 
 const LOCAL_STATE_STORAGE_KEY = 'cloudcli-local-runtime';
 const DEMO_PROJECT_ID = 'demo-project';
-const DEMO_SESSION_ID = 'demo-session';
 const DEMO_PROJECT_PATH = '/workspace/cloudcli-demo';
 
 const DEFAULT_NOTIFICATION_PREFERENCES: NotificationPreferencesState = {
@@ -156,17 +155,6 @@ const DEFAULT_COMMANDS = [
   { name: '/status', description: 'Display local runtime status', namespace: 'builtin' },
   { name: '/memory', description: 'Open the demo memory file', namespace: 'builtin' },
 ];
-
-const createDemoMessages = (sessionId: string): NormalizedMessage[] => [{
-  id: 'demo-welcome-message',
-  sessionId,
-  timestamp: new Date('2026-01-01T12:00:00.000Z').toISOString(),
-  provider: 'claude',
-  kind: 'text',
-  role: 'assistant',
-  content: 'Welcome to the local CloudCLI demo. Your projects, files, settings, and chat responses stay in this browser.',
-  transcriptAnchorId: 'demo-welcome-anchor',
-}];
 
 const createDefaultFiles = (): Record<string, string> => ({
   'README.md': '# CloudCLI Local Demo\n\nThis workspace is powered by local fixture data.\n',
@@ -223,41 +211,21 @@ const createDefaultGitState = (): LocalGitState => ({
 });
 
 const createDefaultLocalState = (): LocalApiState => {
-  const now = new Date().toISOString();
-  const session: ProjectSession = {
-    id: DEMO_SESSION_ID,
-    summary: 'Welcome to the local demo',
-    title: 'Welcome to the local demo',
-    createdAt: '2026-01-01T12:00:00.000Z',
-    created_at: '2026-01-01T12:00:00.000Z',
-    updated_at: now,
-    lastActivity: now,
-    messageCount: 1,
-    provider: 'claude',
-    __provider: 'claude',
-    __projectId: DEMO_PROJECT_ID,
-  };
   const project: Project = {
     projectId: DEMO_PROJECT_ID,
     displayName: 'CloudCLI Local Demo',
     fullPath: DEMO_PROJECT_PATH,
     path: DEMO_PROJECT_PATH,
     isStarred: true,
-    sessions: [session],
-    sessionMeta: { total: 1, hasMore: false },
+    sessions: [],
+    sessionMeta: { total: 0, hasMore: false },
     taskmaster: { hasTaskmaster: false, status: 'not-configured', metadata: { taskCount: 0, completed: 0 } },
   };
 
   return {
     projects: [project],
     archivedProjects: [],
-    sessions: {
-      [DEMO_SESSION_ID]: {
-        session,
-        messages: createDemoMessages(DEMO_SESSION_ID),
-        provider: 'claude',
-      },
-    },
+    sessions: {},
     files: { [DEMO_PROJECT_ID]: createDefaultFiles() },
     assets: {},
     directories: {},
